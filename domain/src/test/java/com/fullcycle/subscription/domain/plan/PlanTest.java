@@ -2,15 +2,13 @@ package com.fullcycle.subscription.domain.plan;
 
 import com.fullcycle.subscription.domain.exceptions.DomainException;
 import com.fullcycle.subscription.domain.utils.InstantUtils;
+import java.time.Instant;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.time.Instant;
-
 /**
- * 1. Caminho feliz de um novo agregado
- * 2. Caminho feliz da restauração do agregado
- * 3. Caminho de validação
+ * 1. Caminho feliz de um novo agregado 2. Caminho feliz da restauração do agregado 3. Caminho de
+ * validação
  */
 public class PlanTest {
 
@@ -21,13 +19,14 @@ public class PlanTest {
     var expectedVersion = 0;
     var expectedName = "Plus";
     var expectedDescription = """
-                Lero lero
-                """;
+        Lero lero
+        """;
     var expectedActive = true;
     var expectedPrice = new MonetaryAmount("BRL", 20.99);
 
     // when
-    var actualPlan = Plan.newPlan(expectedId, expectedName, expectedDescription, expectedActive, expectedPrice);
+    var actualPlan = Plan.newPlan(expectedId, expectedName, expectedDescription, expectedActive,
+        expectedPrice);
 
     // then
     Assertions.assertNotNull(actualPlan);
@@ -49,13 +48,14 @@ public class PlanTest {
     var expectedVersion = 0;
     var expectedName = "Plus";
     var expectedDescription = """
-                Lero lero
-                """;
+        Lero lero
+        """;
     var expectedActive = false;
     var expectedPrice = new MonetaryAmount("BRL", 20.99);
 
     // when
-    var actualPlan = Plan.newPlan(expectedId, expectedName, expectedDescription, null, expectedPrice);
+    var actualPlan = Plan.newPlan(expectedId, expectedName, expectedDescription, null,
+        expectedPrice);
 
     // then
     Assertions.assertNotNull(actualPlan);
@@ -77,8 +77,8 @@ public class PlanTest {
     var expectedVersion = 0;
     var expectedName = "Plus";
     var expectedDescription = """
-                Lero lero
-                """;
+        Lero lero
+        """;
     var expectedActive = false;
     var expectedPrice = new MonetaryAmount("BRL", 20.99);
     var expectedCreatedAt = InstantUtils.now();
@@ -86,7 +86,8 @@ public class PlanTest {
     var expectedDeletedAt = InstantUtils.now();
 
     // when
-    var actualPlan = Plan.with(expectedId, expectedVersion, expectedName, expectedDescription, expectedActive, expectedPrice, expectedCreatedAt, expectedUpdatedAt, expectedDeletedAt);
+    var actualPlan = Plan.with(expectedId, expectedVersion, expectedName, expectedDescription,
+        expectedActive, expectedPrice, expectedCreatedAt, expectedUpdatedAt, expectedDeletedAt);
 
     // then
     Assertions.assertNotNull(actualPlan);
@@ -110,19 +111,19 @@ public class PlanTest {
     var expectedVersion = 0;
     var expectedName = "Plus";
     var expectedDescription = """
-                Lero lero
-                """;
+        Lero lero
+        """;
     var expectedActive = false;
     var expectedPrice = new MonetaryAmount("BRL", 20.99);
     var expectedCreatedAt = InstantUtils.now();
     var expectedUpdatedAt = InstantUtils.now();
     var expectedDeletedAt = InstantUtils.now();
 
-
     // when
     var actualError = Assertions.assertThrows(
         DomainException.class,
-        () -> Plan.with(expectedId, expectedVersion, expectedName, expectedDescription, expectedActive, expectedPrice, expectedCreatedAt, expectedUpdatedAt, expectedDeletedAt)
+        () -> Plan.with(expectedId, expectedVersion, expectedName, expectedDescription,
+            expectedActive, expectedPrice, expectedCreatedAt, expectedUpdatedAt, expectedDeletedAt)
     );
 
     // then
@@ -138,19 +139,19 @@ public class PlanTest {
     var expectedVersion = 0;
     var expectedName = "";
     var expectedDescription = """
-                Lero lero
-                """;
+        Lero lero
+        """;
     var expectedActive = false;
     var expectedPrice = new MonetaryAmount("BRL", 20.99);
     var expectedCreatedAt = InstantUtils.now();
     var expectedUpdatedAt = InstantUtils.now();
     var expectedDeletedAt = InstantUtils.now();
 
-
     // when
     var actualError = Assertions.assertThrows(
         DomainException.class,
-        () -> Plan.with(expectedId, expectedVersion, expectedName, expectedDescription, expectedActive, expectedPrice, expectedCreatedAt, expectedUpdatedAt, expectedDeletedAt)
+        () -> Plan.with(expectedId, expectedVersion, expectedName, expectedDescription,
+            expectedActive, expectedPrice, expectedCreatedAt, expectedUpdatedAt, expectedDeletedAt)
     );
 
     // then
@@ -166,19 +167,19 @@ public class PlanTest {
     var expectedVersion = 0;
     String expectedName = null;
     var expectedDescription = """
-                Lero lero
-                """;
+        Lero lero
+        """;
     var expectedActive = false;
     var expectedPrice = new MonetaryAmount("BRL", 20.99);
     var expectedCreatedAt = InstantUtils.now();
     var expectedUpdatedAt = InstantUtils.now();
     var expectedDeletedAt = InstantUtils.now();
 
-
     // when
     var actualError = Assertions.assertThrows(
         DomainException.class,
-        () -> Plan.with(expectedId, expectedVersion, expectedName, expectedDescription, expectedActive, expectedPrice, expectedCreatedAt, expectedUpdatedAt, expectedDeletedAt)
+        () -> Plan.with(expectedId, expectedVersion, expectedName, expectedDescription,
+            expectedActive, expectedPrice, expectedCreatedAt, expectedUpdatedAt, expectedDeletedAt)
     );
 
     // then
@@ -200,11 +201,11 @@ public class PlanTest {
     var expectedUpdatedAt = InstantUtils.now();
     var expectedDeletedAt = InstantUtils.now();
 
-
     // when
     var actualError = Assertions.assertThrows(
         DomainException.class,
-        () -> Plan.with(expectedId, expectedVersion, expectedName, expectedDescription, expectedActive, expectedPrice, expectedCreatedAt, expectedUpdatedAt, expectedDeletedAt)
+        () -> Plan.with(expectedId, expectedVersion, expectedName, expectedDescription,
+            expectedActive, expectedPrice, expectedCreatedAt, expectedUpdatedAt, expectedDeletedAt)
     );
 
     // then
@@ -226,11 +227,11 @@ public class PlanTest {
     var expectedUpdatedAt = InstantUtils.now();
     var expectedDeletedAt = InstantUtils.now();
 
-
     // when
     var actualError = Assertions.assertThrows(
         DomainException.class,
-        () -> Plan.with(expectedId, expectedVersion, expectedName, expectedDescription, expectedActive, expectedPrice, expectedCreatedAt, expectedUpdatedAt, expectedDeletedAt)
+        () -> Plan.with(expectedId, expectedVersion, expectedName, expectedDescription,
+            expectedActive, expectedPrice, expectedCreatedAt, expectedUpdatedAt, expectedDeletedAt)
     );
 
     // then
@@ -246,19 +247,19 @@ public class PlanTest {
     var expectedVersion = 0;
     var expectedName = "Plus";
     var expectedDescription = """
-                Lero lero
-                """;
+        Lero lero
+        """;
     Boolean expectedActive = null;
     var expectedPrice = new MonetaryAmount("BRL", 20.99);
     var expectedCreatedAt = InstantUtils.now();
     var expectedUpdatedAt = InstantUtils.now();
     var expectedDeletedAt = InstantUtils.now();
 
-
     // when
     var actualError = Assertions.assertThrows(
         DomainException.class,
-        () -> Plan.with(expectedId, expectedVersion, expectedName, expectedDescription, expectedActive, expectedPrice, expectedCreatedAt, expectedUpdatedAt, expectedDeletedAt)
+        () -> Plan.with(expectedId, expectedVersion, expectedName, expectedDescription,
+            expectedActive, expectedPrice, expectedCreatedAt, expectedUpdatedAt, expectedDeletedAt)
     );
 
     // then
@@ -280,11 +281,11 @@ public class PlanTest {
     var expectedUpdatedAt = InstantUtils.now();
     var expectedDeletedAt = InstantUtils.now();
 
-
     // when
     var actualError = Assertions.assertThrows(
         DomainException.class,
-        () -> Plan.with(expectedId, expectedVersion, expectedName, expectedDescription, expectedActive, expectedPrice, expectedCreatedAt, expectedUpdatedAt, expectedDeletedAt)
+        () -> Plan.with(expectedId, expectedVersion, expectedName, expectedDescription,
+            expectedActive, expectedPrice, expectedCreatedAt, expectedUpdatedAt, expectedDeletedAt)
     );
 
     // then
@@ -298,17 +299,17 @@ public class PlanTest {
     var expectedVersion = 0;
     var expectedName = "Plus";
     var expectedDescription = """
-                lero lero
-                """;
+        lero lero
+        """;
     var expectedActive = false;
     var expectedPrice = new MonetaryAmount("BRL", 0.0);
     var expectedCreatedAt = InstantUtils.now();
     var expectedUpdatedAt = InstantUtils.now();
     var expectedDeletedAt = InstantUtils.now();
 
-
     // when
-    var actualPlan = Plan.with(expectedId, expectedVersion, expectedName, expectedDescription, expectedActive, expectedPrice, expectedCreatedAt, expectedUpdatedAt, expectedDeletedAt);
+    var actualPlan = Plan.with(expectedId, expectedVersion, expectedName, expectedDescription,
+        expectedActive, expectedPrice, expectedCreatedAt, expectedUpdatedAt, expectedDeletedAt);
 
     // then
     Assertions.assertNotNull(actualPlan);
@@ -332,8 +333,8 @@ public class PlanTest {
     var expectedVersion = 0;
     var expectedName = "Plus";
     var expectedDescription = """
-                lero lero
-                """;
+        lero lero
+        """;
     var expectedActive = false;
     var expectedPrice = new MonetaryAmount("BRL", 0.0);
     Instant expectedCreatedAt = null;
@@ -343,7 +344,8 @@ public class PlanTest {
     // when
     var actualError = Assertions.assertThrows(
         DomainException.class,
-        () -> Plan.with(expectedId, expectedVersion, expectedName, expectedDescription, expectedActive, expectedPrice, expectedCreatedAt, expectedUpdatedAt, expectedDeletedAt)
+        () -> Plan.with(expectedId, expectedVersion, expectedName, expectedDescription,
+            expectedActive, expectedPrice, expectedCreatedAt, expectedUpdatedAt, expectedDeletedAt)
     );
 
     // then
@@ -359,8 +361,8 @@ public class PlanTest {
     var expectedVersion = 0;
     var expectedName = "Plus";
     var expectedDescription = """
-                lero lero
-                """;
+        lero lero
+        """;
     var expectedActive = false;
     var expectedPrice = new MonetaryAmount("BRL", 0.0);
     var expectedCreatedAt = InstantUtils.now();
@@ -370,7 +372,8 @@ public class PlanTest {
     // when
     var actualError = Assertions.assertThrows(
         DomainException.class,
-        () -> Plan.with(expectedId, expectedVersion, expectedName, expectedDescription, expectedActive, expectedPrice, expectedCreatedAt, expectedUpdatedAt, expectedDeletedAt)
+        () -> Plan.with(expectedId, expectedVersion, expectedName, expectedDescription,
+            expectedActive, expectedPrice, expectedCreatedAt, expectedUpdatedAt, expectedDeletedAt)
     );
 
     // then
@@ -384,8 +387,8 @@ public class PlanTest {
     var expectedVersion = 0;
     var expectedName = "Plus";
     var expectedDescription = """
-                lero lero
-                """;
+        lero lero
+        """;
     var expectedActive = true;
     var expectedPrice = new MonetaryAmount("BRL", 0.0);
     var expectedCreatedAt = InstantUtils.now();
@@ -393,7 +396,8 @@ public class PlanTest {
     Instant expectedDeletedAt = null;
 
     // when
-    var actualPlan = Plan.with(expectedId, expectedVersion, expectedName, expectedDescription, expectedActive, expectedPrice, expectedCreatedAt, expectedUpdatedAt, expectedDeletedAt);
+    var actualPlan = Plan.with(expectedId, expectedVersion, expectedName, expectedDescription,
+        expectedActive, expectedPrice, expectedCreatedAt, expectedUpdatedAt, expectedDeletedAt);
 
     // then
     Assertions.assertNotNull(actualPlan);
@@ -408,4 +412,133 @@ public class PlanTest {
     Assertions.assertEquals(expectedDeletedAt, actualPlan.deletedAt());
   }
 
+  @Test
+  public void givenPlan_whenExecuteWithoutCommands_ShouldDoNothing() {
+    // given
+    var expectedId = new PlanId("PLN-123");
+    var expectedVersion = 1;
+    var expectedName = "Plus";
+    var expectedDescription = """
+        Lero lero
+        """;
+    var expectedActive = true;
+    var expectedPrice = new MonetaryAmount("BRL", 20.99);
+
+    var actualPlan = Plan.newPlan(expectedId, expectedName, expectedDescription, expectedActive,
+        expectedPrice);
+
+    // when
+    actualPlan.execute();
+
+    // then
+    Assertions.assertNotNull(actualPlan);
+    Assertions.assertEquals(expectedVersion, actualPlan.version());
+    Assertions.assertEquals(expectedName, actualPlan.name());
+    Assertions.assertEquals(expectedDescription, actualPlan.description());
+    Assertions.assertEquals(expectedActive, actualPlan.active());
+    Assertions.assertEquals(expectedPrice, actualPlan.price());
+    Assertions.assertNotNull(actualPlan.createdAt());
+    Assertions.assertNotNull(actualPlan.updatedAt());
+    Assertions.assertNull(actualPlan.deletedAt());
+  }
+
+  @Test
+  public void givenInactivePlan_whenExecuteActiveCommand_ShouldActivate()
+      throws InterruptedException {
+    // given
+    var expectedId = new PlanId("PLN-123");
+    var expectedVersion = 1;
+    var expectedName = "Plus";
+    var expectedDescription = """
+        Lero lero
+        """;
+    var expectedActive = true;
+    var expectedPrice = new MonetaryAmount("BRL", 20.99);
+
+    var actualPlan = Plan.newPlan(expectedId, expectedName, expectedDescription, false,
+        expectedPrice);
+    Assertions.assertFalse(actualPlan.active());
+    Assertions.assertNotNull(actualPlan.deletedAt());
+    Thread.sleep(1); // Sleep for updatedAt time change
+
+    // when
+    actualPlan.execute(new PlanCommand.ActivatePlan());
+
+    // then
+    Assertions.assertNotNull(actualPlan);
+    Assertions.assertEquals(expectedVersion, actualPlan.version());
+    Assertions.assertEquals(expectedName, actualPlan.name());
+    Assertions.assertEquals(expectedDescription, actualPlan.description());
+    Assertions.assertEquals(expectedActive, actualPlan.active());
+    Assertions.assertEquals(expectedPrice, actualPlan.price());
+    Assertions.assertNotNull(actualPlan.createdAt());
+    Assertions.assertTrue(actualPlan.createdAt().isBefore(actualPlan.updatedAt()));
+    Assertions.assertNull(actualPlan.deletedAt());
+  }
+
+  @Test
+  public void givenActivePlan_whenExecuteInactivateCommand_ShouldInactivate()
+      throws InterruptedException {
+    // given
+    var expectedId = new PlanId("PLN-123");
+    var expectedVersion = 1;
+    var expectedName = "Plus";
+    var expectedDescription = """
+        Lero lero
+        """;
+    var expectedActive = false;
+    var expectedPrice = new MonetaryAmount("BRL", 20.99);
+
+    var actualPlan = Plan.newPlan(expectedId, expectedName, expectedDescription, true,
+        expectedPrice);
+    Assertions.assertTrue(actualPlan.active());
+    Assertions.assertNull(actualPlan.deletedAt());
+    Thread.sleep(1); // Sleep for updatedAt time change
+
+    // when
+    actualPlan.execute(new PlanCommand.InactivatePlan());
+
+    // then
+    Assertions.assertNotNull(actualPlan);
+    Assertions.assertEquals(expectedVersion, actualPlan.version());
+    Assertions.assertEquals(expectedName, actualPlan.name());
+    Assertions.assertEquals(expectedDescription, actualPlan.description());
+    Assertions.assertEquals(expectedActive, actualPlan.active());
+    Assertions.assertEquals(expectedPrice, actualPlan.price());
+    Assertions.assertNotNull(actualPlan.createdAt());
+    Assertions.assertTrue(actualPlan.createdAt().isBefore(actualPlan.updatedAt()));
+    Assertions.assertNotNull(actualPlan.deletedAt());
+  }
+
+  @Test
+  public void givenPlan_whenExecuteChangeCommand_ShouldUpdateAttributes()
+      throws InterruptedException {
+    // given
+    var expectedId = new PlanId("PLN-123");
+    var expectedVersion = 1;
+    var expectedName = "Plus";
+    var expectedDescription = """
+        Lero lero
+        """;
+    var expectedActive = true;
+    var expectedPrice = new MonetaryAmount("BRL", 20.99);
+
+    var actualPlan = Plan.newPlan(expectedId, "Freemium", "Lá", false, expectedPrice);
+    Thread.sleep(1); // Sleep for updatedAt time change
+
+    // when
+    actualPlan.execute(
+        new PlanCommand.ChangePlan(expectedName, expectedDescription, expectedActive));
+
+    // then
+    Assertions.assertNotNull(actualPlan);
+    Assertions.assertEquals(expectedVersion, actualPlan.version());
+    Assertions.assertEquals(expectedName, actualPlan.name());
+    Assertions.assertEquals(expectedDescription, actualPlan.description());
+    Assertions.assertEquals(expectedActive, actualPlan.active());
+    Assertions.assertEquals(expectedPrice, actualPlan.price());
+    Assertions.assertNotNull(actualPlan.createdAt());
+    Assertions.assertTrue(actualPlan.createdAt().isBefore(actualPlan.updatedAt()));
+    Assertions.assertNull(actualPlan.deletedAt());
+  }
 }
