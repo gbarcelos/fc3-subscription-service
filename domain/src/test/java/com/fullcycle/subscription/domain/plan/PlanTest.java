@@ -17,14 +17,14 @@ public class PlanTest {
   @Test
   public void givenValidParams_whenCallsNewPlan_ShouldInstantiate() {
     // given
-    var expectedId = new PlanId(123L);
+    var expectedId = new PlanId("PLN-123");
     var expectedVersion = 0;
     var expectedName = "Plus";
     var expectedDescription = """
                 Lero lero
                 """;
     var expectedActive = true;
-    var expectedPrice = new Money("BRL", 20.99);
+    var expectedPrice = new MonetaryAmount("BRL", 20.99);
 
     // when
     var actualPlan = Plan.newPlan(expectedId, expectedName, expectedDescription, expectedActive, expectedPrice);
@@ -45,14 +45,14 @@ public class PlanTest {
   @Test
   public void givenNullActive_whenCallsNewPlan_ShouldInstantiate() {
     // given
-    var expectedId = new PlanId(123L);
+    var expectedId = new PlanId("PLN-123");
     var expectedVersion = 0;
     var expectedName = "Plus";
     var expectedDescription = """
                 Lero lero
                 """;
     var expectedActive = false;
-    var expectedPrice = new Money("BRL", 20.99);
+    var expectedPrice = new MonetaryAmount("BRL", 20.99);
 
     // when
     var actualPlan = Plan.newPlan(expectedId, expectedName, expectedDescription, null, expectedPrice);
@@ -73,14 +73,14 @@ public class PlanTest {
   @Test
   public void givenValidParams_whenCallsWith_ShouldInstantiate() {
     // given
-    var expectedId = new PlanId(123L);
+    var expectedId = new PlanId("PLN-123");
     var expectedVersion = 0;
     var expectedName = "Plus";
     var expectedDescription = """
                 Lero lero
                 """;
     var expectedActive = false;
-    var expectedPrice = new Money("BRL", 20.99);
+    var expectedPrice = new MonetaryAmount("BRL", 20.99);
     var expectedCreatedAt = InstantUtils.now();
     var expectedUpdatedAt = InstantUtils.now();
     var expectedDeletedAt = InstantUtils.now();
@@ -113,7 +113,7 @@ public class PlanTest {
                 Lero lero
                 """;
     var expectedActive = false;
-    var expectedPrice = new Money("BRL", 20.99);
+    var expectedPrice = new MonetaryAmount("BRL", 20.99);
     var expectedCreatedAt = InstantUtils.now();
     var expectedUpdatedAt = InstantUtils.now();
     var expectedDeletedAt = InstantUtils.now();
@@ -134,14 +134,14 @@ public class PlanTest {
     // given
     var expectedMessage = "'name' should not be empty";
 
-    var expectedId = new PlanId(123L);
+    var expectedId = new PlanId("PLN-123");
     var expectedVersion = 0;
     var expectedName = "";
     var expectedDescription = """
                 Lero lero
                 """;
     var expectedActive = false;
-    var expectedPrice = new Money("BRL", 20.99);
+    var expectedPrice = new MonetaryAmount("BRL", 20.99);
     var expectedCreatedAt = InstantUtils.now();
     var expectedUpdatedAt = InstantUtils.now();
     var expectedDeletedAt = InstantUtils.now();
@@ -162,14 +162,14 @@ public class PlanTest {
     // given
     var expectedMessage = "'name' should not be empty";
 
-    var expectedId = new PlanId(123L);
+    var expectedId = new PlanId("PLN-123");
     var expectedVersion = 0;
     String expectedName = null;
     var expectedDescription = """
                 Lero lero
                 """;
     var expectedActive = false;
-    var expectedPrice = new Money("BRL", 20.99);
+    var expectedPrice = new MonetaryAmount("BRL", 20.99);
     var expectedCreatedAt = InstantUtils.now();
     var expectedUpdatedAt = InstantUtils.now();
     var expectedDeletedAt = InstantUtils.now();
@@ -190,12 +190,12 @@ public class PlanTest {
     // given
     var expectedMessage = "'description' should not be empty";
 
-    var expectedId = new PlanId(123L);
+    var expectedId = new PlanId("PLN-123");
     var expectedVersion = 0;
     var expectedName = "Plus";
     var expectedDescription = "";
     var expectedActive = false;
-    var expectedPrice = new Money("BRL", 20.99);
+    var expectedPrice = new MonetaryAmount("BRL", 20.99);
     var expectedCreatedAt = InstantUtils.now();
     var expectedUpdatedAt = InstantUtils.now();
     var expectedDeletedAt = InstantUtils.now();
@@ -216,12 +216,12 @@ public class PlanTest {
     // given
     var expectedMessage = "'description' should not be empty";
 
-    var expectedId = new PlanId(123L);
+    var expectedId = new PlanId("PLN-123");
     var expectedVersion = 0;
     var expectedName = "Plus";
     String expectedDescription = null;
     var expectedActive = false;
-    var expectedPrice = new Money("BRL", 20.99);
+    var expectedPrice = new MonetaryAmount("BRL", 20.99);
     var expectedCreatedAt = InstantUtils.now();
     var expectedUpdatedAt = InstantUtils.now();
     var expectedDeletedAt = InstantUtils.now();
@@ -242,14 +242,14 @@ public class PlanTest {
     // given
     var expectedMessage = "'active' should not be null";
 
-    var expectedId = new PlanId(123L);
+    var expectedId = new PlanId("PLN-123");
     var expectedVersion = 0;
     var expectedName = "Plus";
     var expectedDescription = """
                 Lero lero
                 """;
     Boolean expectedActive = null;
-    var expectedPrice = new Money("BRL", 20.99);
+    var expectedPrice = new MonetaryAmount("BRL", 20.99);
     var expectedCreatedAt = InstantUtils.now();
     var expectedUpdatedAt = InstantUtils.now();
     var expectedDeletedAt = InstantUtils.now();
@@ -270,12 +270,12 @@ public class PlanTest {
     // given
     var expectedMessage = "'price' should not be null";
 
-    var expectedId = new PlanId(123L);
+    var expectedId = new PlanId("PLN-123");
     var expectedVersion = 0;
     var expectedName = "Plus";
     var expectedDescription = "description";
     var expectedActive = false;
-    Money expectedPrice = null;
+    MonetaryAmount expectedPrice = null;
     var expectedCreatedAt = InstantUtils.now();
     var expectedUpdatedAt = InstantUtils.now();
     var expectedDeletedAt = InstantUtils.now();
@@ -294,7 +294,7 @@ public class PlanTest {
   @Test
   public void given0AsPrice_whenCallsWith_ShouldReturnOK() {
     // given
-    var expectedId = new PlanId(123L);
+    var expectedId = new PlanId("PLN-123");
     var expectedVersion = 0;
     var expectedName = "Plus";
     var expectedDescription = """
@@ -328,7 +328,7 @@ public class PlanTest {
     // given
     var expectedMessage = "'createdAt' should not be null";
 
-    var expectedId = new PlanId(123L);
+    var expectedId = new PlanId("PLN-123");
     var expectedVersion = 0;
     var expectedName = "Plus";
     var expectedDescription = """
@@ -355,7 +355,7 @@ public class PlanTest {
     // given
     var expectedMessage = "'updatedAt' should not be null";
 
-    var expectedId = new PlanId(123L);
+    var expectedId = new PlanId("PLN-123");
     var expectedVersion = 0;
     var expectedName = "Plus";
     var expectedDescription = """
@@ -380,7 +380,7 @@ public class PlanTest {
   @Test
   public void givenNullDeletedAt_whenCallsWith_ShouldReturnOK() {
     // given
-    var expectedId = new PlanId(123L);
+    var expectedId = new PlanId("PLN-123");
     var expectedVersion = 0;
     var expectedName = "Plus";
     var expectedDescription = """
