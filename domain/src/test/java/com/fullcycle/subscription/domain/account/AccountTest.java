@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test;
  * 2. Caminho feliz da restauração do agregado
  * 3. Caminho de validação
  */
-public class AccountTest extends UnitTest {
+class AccountTest extends UnitTest {
 
   @Test
   public void givenValidParams_whenCallsNewAccount_ShouldInstantiateAndDispatchEvent() {

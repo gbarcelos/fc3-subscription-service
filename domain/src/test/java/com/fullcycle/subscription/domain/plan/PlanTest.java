@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
  * 1. Caminho feliz de um novo agregado 2. Caminho feliz da restauração do agregado 3. Caminho de
  * validação
  */
-public class PlanTest {
+class PlanTest {
 
   @Test
   public void givenValidParams_whenCallsNewPlan_ShouldInstantiate() {
