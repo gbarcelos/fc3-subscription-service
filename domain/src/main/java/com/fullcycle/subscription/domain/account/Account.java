@@ -4,6 +4,7 @@ import com.fullcycle.subscription.domain.AggregateRoot;
 import com.fullcycle.subscription.domain.account.AccountCommand.ChangeDocumentCommand;
 import com.fullcycle.subscription.domain.account.AccountCommand.ChangeEmailCommand;
 import com.fullcycle.subscription.domain.account.AccountCommand.ChangeProfileCommand;
+import com.fullcycle.subscription.domain.account.AccountEvent.AccountCreated;
 import com.fullcycle.subscription.domain.account.iam.UserId;
 import com.fullcycle.subscription.domain.person.Address;
 import com.fullcycle.subscription.domain.person.Document;
@@ -44,7 +45,9 @@ public class Account extends AggregateRoot<AccountId> {
       final Name aName,
       final Document aDocument
   ) {
-    return new Account(anAccountId, 0, anUserId, anEmail, aName, aDocument, null);
+    final var anAccount = new Account(anAccountId, 0, anUserId, anEmail, aName, aDocument, null);
+    anAccount.registerEvent(new AccountCreated(anAccount));
+    return anAccount;
   }
 
   public static Account with(
