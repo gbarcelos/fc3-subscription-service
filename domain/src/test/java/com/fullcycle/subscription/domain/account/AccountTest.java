@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test;
  * 2. Caminho feliz da restauração do agregado
  * 3. Caminho de validação
  */
-class AccountTest extends UnitTest {
+public class AccountTest extends UnitTest {
 
   @Test
   public void givenValidParams_whenCallsNewAccount_ShouldInstantiateAndDispatchEvent() {
@@ -26,9 +26,11 @@ class AccountTest extends UnitTest {
     var expectedName = new Name("John", "Doe");
     var expectedEmail = new Email("john@gmail.com");
     var expectedDocument = Document.create("12345678912", "cpf");
+    var expectedEvents = 1;
 
     // when
-    var actualAccount = Account.newAccount(expectedId, expectedUserId, expectedEmail, expectedName, expectedDocument);
+    var actualAccount = Account.newAccount(expectedId, expectedUserId, expectedEmail, expectedName,
+        expectedDocument);
 
     // then
     Assertions.assertNotNull(actualAccount);
@@ -39,6 +41,10 @@ class AccountTest extends UnitTest {
     Assertions.assertEquals(expectedEmail, actualAccount.email());
     Assertions.assertEquals(expectedDocument, actualAccount.document());
     Assertions.assertNull(actualAccount.billingAddress());
+
+    Assertions.assertEquals(expectedEvents, actualAccount.domainEvents().size());
+    Assertions.assertInstanceOf(AccountEvent.AccountCreated.class,
+        actualAccount.domainEvents().getFirst());
   }
 
   @Test
@@ -53,7 +59,8 @@ class AccountTest extends UnitTest {
     var expectedAddress = new Address("09123123", "11", "Bloco A", "BR");
 
     // when
-    var actualAccount = Account.with(expectedId, expectedVersion, expectedUserId, expectedEmail, expectedName, expectedDocument, expectedAddress);
+    var actualAccount = Account.with(expectedId, expectedVersion, expectedUserId, expectedEmail,
+        expectedName, expectedDocument, expectedAddress);
 
     // then
     Assertions.assertNotNull(actualAccount);
@@ -82,7 +89,8 @@ class AccountTest extends UnitTest {
     // when
     var actualError = Assertions.assertThrows(
         DomainException.class,
-        () -> Account.with(expectedId, expectedVersion, expectedUserId, expectedEmail, expectedName, expectedDocument, expectedAddress)
+        () -> Account.with(expectedId, expectedVersion, expectedUserId, expectedEmail, expectedName,
+            expectedDocument, expectedAddress)
     );
 
     // then
@@ -105,7 +113,8 @@ class AccountTest extends UnitTest {
     // when
     var actualError = Assertions.assertThrows(
         DomainException.class,
-        () -> Account.with(expectedId, expectedVersion, expectedUserId, expectedEmail, expectedName, expectedDocument, expectedAddress)
+        () -> Account.with(expectedId, expectedVersion, expectedUserId, expectedEmail, expectedName,
+            expectedDocument, expectedAddress)
     );
 
     // then
@@ -128,7 +137,8 @@ class AccountTest extends UnitTest {
     // when
     var actualError = Assertions.assertThrows(
         DomainException.class,
-        () -> Account.with(expectedId, expectedVersion, expectedUserId, expectedEmail, expectedName, expectedDocument, expectedAddress)
+        () -> Account.with(expectedId, expectedVersion, expectedUserId, expectedEmail, expectedName,
+            expectedDocument, expectedAddress)
     );
 
     // then
@@ -151,7 +161,8 @@ class AccountTest extends UnitTest {
     // when
     var actualError = Assertions.assertThrows(
         DomainException.class,
-        () -> Account.with(expectedId, expectedVersion, expectedUserId, expectedEmail, expectedName, expectedDocument, expectedAddress)
+        () -> Account.with(expectedId, expectedVersion, expectedUserId, expectedEmail, expectedName,
+            expectedDocument, expectedAddress)
     );
 
     // then
@@ -174,7 +185,8 @@ class AccountTest extends UnitTest {
     // when
     var actualError = Assertions.assertThrows(
         DomainException.class,
-        () -> Account.with(expectedId, expectedVersion, expectedUserId, expectedEmail, expectedName, expectedDocument, expectedAddress)
+        () -> Account.with(expectedId, expectedVersion, expectedUserId, expectedEmail, expectedName,
+            expectedDocument, expectedAddress)
     );
 
     // then
@@ -196,7 +208,101 @@ class AccountTest extends UnitTest {
 
     // when
     Assertions.assertDoesNotThrow(
-        () -> Account.with(expectedId, expectedVersion, expectedUserId, expectedEmail, expectedName, expectedDocument, expectedAddress)
+        () -> Account.with(expectedId, expectedVersion, expectedUserId, expectedEmail, expectedName,
+            expectedDocument, expectedAddress)
     );
+  }
+
+  @Test
+  public void givenAccount_whenCallsExecuteWithProfileCommand_ShouldUpdateNameAndAddress() {
+    // given
+    var expectedId = new AccountId("ACC-123");
+    var expectedVersion = 0;
+    var expectedUserId = new UserId("USER-123");
+    var expectedName = new Name("John", "Doe");
+    var expectedEmail = new Email("john@gmail.com");
+    var expectedDocument = Document.create("12345678912", "cpf");
+    var expectedAddress = new Address("12312123", "123", null, "BR");
+    var expectedEvents = 0;
+
+    var actualAccount = Account.with(expectedId, expectedVersion, expectedUserId, expectedEmail,
+        new Name("Valentin", "Doe"), expectedDocument, null);
+
+    // when
+    actualAccount.execute(new AccountCommand.ChangeProfileCommand(expectedName, expectedAddress));
+
+    // then
+    Assertions.assertNotNull(actualAccount);
+    Assertions.assertEquals(expectedId, actualAccount.id());
+    Assertions.assertEquals(expectedVersion, actualAccount.version());
+    Assertions.assertEquals(expectedUserId, actualAccount.userId());
+    Assertions.assertEquals(expectedName, actualAccount.name());
+    Assertions.assertEquals(expectedEmail, actualAccount.email());
+    Assertions.assertEquals(expectedDocument, actualAccount.document());
+    Assertions.assertEquals(expectedAddress, actualAccount.billingAddress());
+
+    Assertions.assertEquals(expectedEvents, actualAccount.domainEvents().size());
+  }
+
+  @Test
+  public void givenAccount_whenCallsExecuteWithEmailCommand_ShouldUpdateEmail() {
+    // given
+    var expectedId = new AccountId("ACC-123");
+    var expectedVersion = 0;
+    var expectedUserId = new UserId("USER-123");
+    var expectedName = new Name("John", "Doe");
+    var expectedEmail = new Email("john@gmail.com");
+    var expectedDocument = Document.create("12345678912", "cpf");
+    var expectedAddress = new Address("12312123", "123", null, "BR");
+    var expectedEvents = 0;
+
+    var actualAccount = Account.with(expectedId, expectedVersion, expectedUserId,
+        new Email("valentin@gmail.com"), expectedName, expectedDocument, expectedAddress);
+
+    // when
+    actualAccount.execute(new AccountCommand.ChangeEmailCommand(expectedEmail));
+
+    // then
+    Assertions.assertNotNull(actualAccount);
+    Assertions.assertEquals(expectedId, actualAccount.id());
+    Assertions.assertEquals(expectedVersion, actualAccount.version());
+    Assertions.assertEquals(expectedUserId, actualAccount.userId());
+    Assertions.assertEquals(expectedName, actualAccount.name());
+    Assertions.assertEquals(expectedEmail, actualAccount.email());
+    Assertions.assertEquals(expectedDocument, actualAccount.document());
+    Assertions.assertEquals(expectedAddress, actualAccount.billingAddress());
+
+    Assertions.assertEquals(expectedEvents, actualAccount.domainEvents().size());
+  }
+
+  @Test
+  public void givenAccount_whenCallsExecuteWithDocumentCommand_ShouldUpdateDocument() {
+    // given
+    var expectedId = new AccountId("ACC-123");
+    var expectedVersion = 0;
+    var expectedUserId = new UserId("USER-123");
+    var expectedName = new Name("John", "Doe");
+    var expectedEmail = new Email("john@gmail.com");
+    var expectedDocument = Document.create("12345678912", "cpf");
+    var expectedAddress = new Address("12312123", "123", null, "BR");
+    var expectedEvents = 0;
+
+    var actualAccount = Account.with(expectedId, expectedVersion, expectedUserId, expectedEmail,
+        expectedName, Document.create("12345673333", "cpf"), expectedAddress);
+
+    // when
+    actualAccount.execute(new AccountCommand.ChangeDocumentCommand(expectedDocument));
+
+    // then
+    Assertions.assertNotNull(actualAccount);
+    Assertions.assertEquals(expectedId, actualAccount.id());
+    Assertions.assertEquals(expectedVersion, actualAccount.version());
+    Assertions.assertEquals(expectedUserId, actualAccount.userId());
+    Assertions.assertEquals(expectedName, actualAccount.name());
+    Assertions.assertEquals(expectedEmail, actualAccount.email());
+    Assertions.assertEquals(expectedDocument, actualAccount.document());
+    Assertions.assertEquals(expectedAddress, actualAccount.billingAddress());
+
+    Assertions.assertEquals(expectedEvents, actualAccount.domainEvents().size());
   }
 }
