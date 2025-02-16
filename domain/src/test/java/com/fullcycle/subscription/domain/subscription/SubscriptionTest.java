@@ -3,6 +3,7 @@ package com.fullcycle.subscription.domain.subscription;
 import com.fullcycle.subscription.domain.Fixture;
 import com.fullcycle.subscription.domain.account.AccountId;
 import com.fullcycle.subscription.domain.plan.PlanId;
+import com.fullcycle.subscription.domain.subscription.status.SubscriptionStatus;
 import com.fullcycle.subscription.domain.utils.InstantUtils;
 import java.time.Instant;
 import java.time.LocalDate;
