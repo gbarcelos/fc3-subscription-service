@@ -4,6 +4,10 @@ import com.fullcycle.subscription.domain.AggregateRoot;
 import com.fullcycle.subscription.domain.account.AccountId;
 import com.fullcycle.subscription.domain.plan.Plan;
 import com.fullcycle.subscription.domain.plan.PlanId;
+import com.fullcycle.subscription.domain.subscription.SubscriptionCommand.CancelSubscription;
+import com.fullcycle.subscription.domain.subscription.SubscriptionCommand.ChangeStatus;
+import com.fullcycle.subscription.domain.subscription.SubscriptionCommand.IncompleteSubscription;
+import com.fullcycle.subscription.domain.subscription.SubscriptionCommand.RenewSubscription;
 import com.fullcycle.subscription.domain.subscription.status.SubscriptionStatus;
 import com.fullcycle.subscription.domain.utils.InstantUtils;
 import java.time.Instant;
@@ -46,9 +50,11 @@ public class Subscription extends AggregateRoot<SubscriptionId> {
     this.setUpdatedAt(updatedAt);
   }
 
-  public static Subscription newSubscription(final SubscriptionId anId, final AccountId anAccountId, final Plan selectedPlan) {
+  public static Subscription newSubscription(final SubscriptionId anId, final AccountId anAccountId,
+      final Plan selectedPlan) {
     final var now = InstantUtils.now();
-    return new Subscription(anId, 0, anAccountId, selectedPlan.id(), LocalDate.now().plusMonths(1), SubscriptionStatus.TRAILING, null, null, now, now);
+    return new Subscription(anId, 0, anAccountId, selectedPlan.id(), LocalDate.now().plusMonths(1),
+        SubscriptionStatus.TRAILING, null, null, now, now);
   }
 
   public static Subscription with(
@@ -75,6 +81,23 @@ public class Subscription extends AggregateRoot<SubscriptionId> {
         createdAt,
         updatedAt
     );
+  }
+
+  public void execute(final SubscriptionCommand... cmds) {
+    if (cmds == null || cmds.length == 0) {
+      return;
+    }
+
+    for (var cmd : cmds) {
+      switch (cmd) {
+        case CancelSubscription c -> apply(c);
+        case ChangeStatus c -> apply(c);
+        case IncompleteSubscription c -> apply(c);
+        case RenewSubscription c -> apply(c);
+      }
+    }
+
+    this.setUpdatedAt(InstantUtils.now());
   }
 
   public int version() {
@@ -111,6 +134,26 @@ public class Subscription extends AggregateRoot<SubscriptionId> {
 
   public Instant updatedAt() {
     return updatedAt;
+  }
+
+  private void apply(final IncompleteSubscription cmd) {
+    this.status.incomplete();
+    this.setLastTransactionId(cmd.aTransactionId());
+  }
+
+  private void apply(final RenewSubscription cmd) {
+    this.status.active();
+    this.setLastTransactionId(cmd.aTransactionId());
+    this.setDueDate(dueDate.plusMonths(1));
+    this.setLastRenewDate(InstantUtils.now());
+  }
+
+  private void apply(final CancelSubscription cmd) {
+    this.status.cancel();
+  }
+
+  private void apply(final ChangeStatus cmd) {
+    this.setStatus(SubscriptionStatus.create(cmd.status(), this));
   }
 
   private void setVersion(int version) {

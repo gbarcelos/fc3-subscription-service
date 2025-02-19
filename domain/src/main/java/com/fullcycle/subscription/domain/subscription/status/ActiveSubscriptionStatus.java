@@ -1,23 +1,25 @@
 package com.fullcycle.subscription.domain.subscription.status;
 
+import com.fullcycle.subscription.domain.exceptions.DomainException;
 import com.fullcycle.subscription.domain.subscription.Subscription;
 import com.fullcycle.subscription.domain.subscription.SubscriptionCommand.ChangeStatus;
 
-public record TrailingSubscriptionStatus(Subscription subscription) implements SubscriptionStatus {
+public final class ActiveSubscriptionStatus extends AbstractSubscriptionStatus {
+
+  private final Subscription subscription;
+
+  public ActiveSubscriptionStatus(final Subscription subscription) {
+    this.subscription = subscription;
+  }
 
   @Override
   public void trailing() {
-    // Do nothing
+    throw DomainException.with("Subscription with status active can´t transit to trailing");
   }
 
   @Override
   public void incomplete() {
     this.subscription.execute(new ChangeStatus(INCOMPLETE));
-  }
-
-  @Override
-  public void active() {
-    this.subscription.execute(new ChangeStatus(ACTIVE));
   }
 
   @Override
