@@ -5,13 +5,12 @@ import com.fullcycle.subscription.domain.account.AccountId;
 import com.fullcycle.subscription.domain.plan.PlanId;
 import com.fullcycle.subscription.domain.subscription.status.SubscriptionStatus;
 import com.fullcycle.subscription.domain.utils.InstantUtils;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.UUID;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  * 1. Caminho feliz de um novo agregado
@@ -51,6 +50,7 @@ public class SubscriptionTest {
     Assertions.assertNotNull(actualSubscription.updatedAt());
 
     Assertions.assertEquals(expectedEvents, actualSubscription.domainEvents().size());
+    Assertions.assertInstanceOf(SubscriptionCreated.class, actualSubscription.domainEvents().getFirst());
   }
 
   @Test
@@ -143,6 +143,7 @@ public class SubscriptionTest {
     Assertions.assertTrue(actualSubscription.updatedAt().isAfter(expectedUpdatedAt));
 
     Assertions.assertEquals(expectedEvents, actualSubscription.domainEvents().size());
+    Assertions.assertInstanceOf(SubscriptionIncomplete.class, actualSubscription.domainEvents().getFirst());
   }
 
   @Test
@@ -191,6 +192,7 @@ public class SubscriptionTest {
     Assertions.assertTrue(actualSubscription.updatedAt().isAfter(expectedUpdatedAt));
 
     Assertions.assertEquals(expectedEvents, actualSubscription.domainEvents().size());
+    Assertions.assertInstanceOf(SubscriptionRenewed.class, actualSubscription.domainEvents().getFirst());
   }
 
   @Test
@@ -239,5 +241,6 @@ public class SubscriptionTest {
     Assertions.assertTrue(actualSubscription.updatedAt().isAfter(expectedUpdatedAt));
 
     Assertions.assertEquals(expectedEvents, actualSubscription.domainEvents().size());
+    Assertions.assertInstanceOf(SubscriptionCanceled.class, actualSubscription.domainEvents().getFirst());
   }
 }
