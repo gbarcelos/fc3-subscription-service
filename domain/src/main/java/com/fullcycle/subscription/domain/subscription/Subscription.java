@@ -8,7 +8,11 @@ import com.fullcycle.subscription.domain.subscription.SubscriptionCommand.Cancel
 import com.fullcycle.subscription.domain.subscription.SubscriptionCommand.ChangeStatus;
 import com.fullcycle.subscription.domain.subscription.SubscriptionCommand.IncompleteSubscription;
 import com.fullcycle.subscription.domain.subscription.SubscriptionCommand.RenewSubscription;
+import com.fullcycle.subscription.domain.subscription.status.ActiveSubscriptionStatus;
+import com.fullcycle.subscription.domain.subscription.status.CanceledSubscriptionStatus;
+import com.fullcycle.subscription.domain.subscription.status.IncompleteSubscriptionStatus;
 import com.fullcycle.subscription.domain.subscription.status.SubscriptionStatus;
+import com.fullcycle.subscription.domain.subscription.status.TrailingSubscriptionStatus;
 import com.fullcycle.subscription.domain.utils.InstantUtils;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -200,5 +204,21 @@ public class Subscription extends AggregateRoot<SubscriptionId> {
   private void setUpdatedAt(final Instant updatedAt) {
     this.assertArgumentNotNull(updatedAt, "'createdAt' should not be null");
     this.updatedAt = updatedAt;
+  }
+
+  public boolean isTrail() {
+    return this.status instanceof TrailingSubscriptionStatus;
+  }
+
+  public boolean isActive() {
+    return this.status instanceof ActiveSubscriptionStatus;
+  }
+
+  public boolean isCanceled() {
+    return this.status instanceof CanceledSubscriptionStatus;
+  }
+
+  public boolean isIncomplete() {
+    return this.status instanceof IncompleteSubscriptionStatus;
   }
 }
