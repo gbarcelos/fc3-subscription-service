@@ -7,7 +7,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.fullcycle.subscription.application.account.AddToSubscribersGroup;
+import com.fullcycle.subscription.application.account.AddToGroup;
 import com.fullcycle.subscription.domain.Fixture;
 import com.fullcycle.subscription.domain.UnitTest;
 import com.fullcycle.subscription.domain.account.AccountGateway;
@@ -21,7 +21,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
-class DefaultAddToSubscribersGroupTest extends UnitTest {
+class DefaultAddToGroupTest extends UnitTest {
 
   @Mock
   private AccountGateway accountGateway;
@@ -33,7 +33,7 @@ class DefaultAddToSubscribersGroupTest extends UnitTest {
   private SubscriptionGateway subscriptionGateway;
 
   @InjectMocks
-  private DefaultAddToSubscribersGroup target;
+  private DefaultAddToGroup target;
 
   @Test
   public void givenTrailSubscription_whenCallsExecute_shouldCallIdentityProvider() {
@@ -66,7 +66,7 @@ class DefaultAddToSubscribersGroupTest extends UnitTest {
       String accountId,
       String groupId,
       String subscriptionId
-  ) implements AddToSubscribersGroup.Input {
+  ) implements AddToGroup.Input {
 
   }
 }
