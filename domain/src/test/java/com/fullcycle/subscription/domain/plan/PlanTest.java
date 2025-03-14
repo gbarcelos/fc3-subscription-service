@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
  * 1. Caminho feliz de um novo agregado 2. Caminho feliz da restauração do agregado 3. Caminho de
  * validação
  */
-class PlanTest {
+public class PlanTest {
 
   @Test
   public void givenValidParams_whenCallsNewPlan_ShouldInstantiate() {
@@ -524,12 +524,12 @@ class PlanTest {
     var expectedActive = true;
     var expectedPrice = new Money("BRL", 20.99);
 
-    var actualPlan = Plan.newPlan(expectedId, "Freemium", "Lá", false, expectedPrice);
+    var actualPlan = Plan.newPlan(expectedId, "Freemium", "Lá", false, new Money("USD", 2.99));
     Thread.sleep(1); // Sleep for updatedAt time change
 
     // when
-    actualPlan.execute(
-        new PlanCommand.ChangePlan(expectedName, expectedDescription, expectedActive));
+    actualPlan.execute(new PlanCommand.ChangePlan(expectedName, expectedDescription, expectedPrice,
+        expectedActive));
 
     // then
     Assertions.assertNotNull(actualPlan);
