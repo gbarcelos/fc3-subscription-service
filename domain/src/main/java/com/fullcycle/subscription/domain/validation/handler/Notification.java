@@ -3,7 +3,6 @@ package com.fullcycle.subscription.domain.validation.handler;
 import com.fullcycle.subscription.domain.exceptions.DomainException;
 import com.fullcycle.subscription.domain.validation.Error;
 import com.fullcycle.subscription.domain.validation.ValidationHandler;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +24,10 @@ public class Notification implements ValidationHandler {
 
   public static Notification create(final Error anError) {
     return new Notification(new ArrayList<>()).append(anError);
+  }
+
+  public static Notification create(final List<Error> errors) {
+    return new Notification(new ArrayList<>(errors));
   }
 
   @Override
