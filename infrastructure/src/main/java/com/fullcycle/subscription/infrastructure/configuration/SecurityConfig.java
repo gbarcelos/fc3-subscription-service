@@ -1,13 +1,5 @@
 package com.fullcycle.subscription.infrastructure.configuration;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -23,6 +15,11 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtClaimNames;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.security.web.SecurityFilterChain;
+
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Configuration(proxyBeanMethods = false)
 @EnableWebSecurity
@@ -40,7 +37,7 @@ public class SecurityConfig {
         })
         .authorizeHttpRequests(authorize -> {
           authorize
-              .requestMatchers("/graphql", "/graphiql").permitAll()
+              .requestMatchers("/accounts/sign-up").permitAll()
               .anyRequest().hasRole(ROLE_ADMIN);
         })
         .oauth2ResourceServer(oauth -> {
@@ -77,8 +74,7 @@ public class SecurityConfig {
     }
   }
 
-  static class KeycloakAuthoritiesConverter implements
-      Converter<Jwt, Collection<GrantedAuthority>> {
+  static class KeycloakAuthoritiesConverter implements Converter<Jwt, Collection<GrantedAuthority>> {
 
     private static final String REALM_ACCESS = "realm_access";
     private static final String ROLES = "roles";
