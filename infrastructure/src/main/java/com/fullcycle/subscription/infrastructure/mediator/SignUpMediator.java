@@ -20,6 +20,7 @@ public class SignUpMediator {
   }
 
   public SignUpResponse signUp(final SignUpRequest req) {
-    return this.createAccount.execute(this.createIdpUser.execute(req, req::with), SignUpResponse::new);
+    var signUpRequest = this.createIdpUser.execute(req, req::with);
+    return this.createAccount.execute(signUpRequest, SignUpResponse::new);
   }
 }
