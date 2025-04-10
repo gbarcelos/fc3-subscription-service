@@ -1,6 +1,8 @@
 package com.fullcycle.subscription.infrastructure.rest;
 
+import com.fullcycle.subscription.infrastructure.rest.models.req.ChangePlanRequest;
 import com.fullcycle.subscription.infrastructure.rest.models.req.CreatePlanRequest;
+import com.fullcycle.subscription.infrastructure.rest.models.res.ChangePlanResponse;
 import com.fullcycle.subscription.infrastructure.rest.models.res.CreatePlanResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

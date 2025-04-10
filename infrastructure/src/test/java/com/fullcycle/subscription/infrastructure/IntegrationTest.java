@@ -14,11 +14,11 @@ import java.lang.annotation.*;
 @Inherited
 @ActiveProfiles("test-integration")
 @EnableAutoConfiguration(exclude = {
-        ElasticsearchRepositoriesAutoConfiguration.class
+    ElasticsearchRepositoriesAutoConfiguration.class
 })
 @SpringBootTest(classes = {
-        WebServerConfig.class,
-        IntegrationTestConfiguration.class,
+    WebServerConfig.class,
+    IntegrationTestConfiguration.class,
 })
 @Tag("integrationTest")
 public @interface IntegrationTest {
