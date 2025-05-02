@@ -1,4 +1,4 @@
-package com.fullcycle.subscription.infrastructure.authentication;
+package com.fullcycle.subscription.infrastructure.authentication.clientcredentials;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
@@ -8,9 +8,9 @@ import static com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.fullcycle.subscription.infrastructure.AbstractRestClientTest;
-import com.fullcycle.subscription.infrastructure.authentication.AuthenticationGateway.ClientCredentialsInput;
-import com.fullcycle.subscription.infrastructure.authentication.AuthenticationGateway.RefreshTokenInput;
-import com.fullcycle.subscription.infrastructure.authentication.KeycloakAuthenticationGateway.KeycloakAuthenticationResult;
+import com.fullcycle.subscription.infrastructure.authentication.clientcredentials.AuthenticationGateway.ClientCredentialsInput;
+import com.fullcycle.subscription.infrastructure.authentication.clientcredentials.AuthenticationGateway.RefreshTokenInput;
+import com.fullcycle.subscription.infrastructure.authentication.clientcredentials.KeycloakAuthenticationGateway.KeycloakAuthenticationResult;
 import com.fullcycle.subscription.infrastructure.json.Json;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

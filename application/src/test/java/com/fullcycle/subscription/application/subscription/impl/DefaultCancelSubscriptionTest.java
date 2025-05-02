@@ -40,7 +40,7 @@ class DefaultCancelSubscriptionTest extends UnitTest {
     var expectedSubscriptionId = expectedSubscription.id();
     var expectedSubscriptionStatus = CanceledSubscriptionStatus.CANCELED;
 
-    when(subscriptionGateway.subscriptionOfId(any())).thenReturn(Optional.of(expectedSubscription));
+    when(subscriptionGateway.latestSubscriptionOfAccount(any())).thenReturn(Optional.of(expectedSubscription));
     when(subscriptionGateway.save(any())).thenAnswer(returnsFirstArg());
 
     // when

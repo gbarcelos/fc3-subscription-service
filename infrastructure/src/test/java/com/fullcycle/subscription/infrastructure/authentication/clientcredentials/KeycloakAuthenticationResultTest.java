@@ -1,7 +1,7 @@
-package com.fullcycle.subscription.infrastructure.authentication;
+package com.fullcycle.subscription.infrastructure.authentication.clientcredentials;
 
 import com.fullcycle.subscription.infrastructure.JacksonTest;
-import com.fullcycle.subscription.infrastructure.authentication.KeycloakAuthenticationGateway.KeycloakAuthenticationResult;
+import com.fullcycle.subscription.infrastructure.authentication.clientcredentials.KeycloakAuthenticationGateway.KeycloakAuthenticationResult;
 import java.io.IOException;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
