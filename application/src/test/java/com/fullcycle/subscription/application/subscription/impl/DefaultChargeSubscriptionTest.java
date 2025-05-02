@@ -1,11 +1,5 @@
 package com.fullcycle.subscription.application.subscription.impl;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.eq;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import com.fullcycle.subscription.application.subscription.ChargeSubscription;
 import com.fullcycle.subscription.domain.Fixture;
 import com.fullcycle.subscription.domain.UnitTest;
@@ -22,16 +16,20 @@ import com.fullcycle.subscription.domain.subscription.SubscriptionGateway;
 import com.fullcycle.subscription.domain.subscription.SubscriptionId;
 import com.fullcycle.subscription.domain.subscription.status.SubscriptionStatus;
 import com.fullcycle.subscription.domain.utils.InstantUtils;
-import java.time.Clock;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+
+import java.time.Clock;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.util.Optional;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 class DefaultChargeSubscriptionTest extends UnitTest {
 
@@ -63,17 +61,15 @@ class DefaultChargeSubscriptionTest extends UnitTest {
     var expectedPlan = Fixture.Plans.plus();
     var expectedAccount = Fixture.Accounts.john();
     var expectedStatus = SubscriptionStatus.ACTIVE;
-    var expectedSubscription = newSubscriptionWith(expectedAccount.id(), expectedPlan,
-        expectedStatus, referenceDate);
+    var expectedSubscription = newSubscriptionWith(expectedAccount.id(), expectedPlan, expectedStatus, referenceDate);
     var expectedDueDate = referenceDate.toLocalDate();
 
     when(clock.instant()).thenReturn(InstantUtils.now());
-    when(subscriptionGateway.subscriptionOfId(any())).thenReturn(Optional.of(expectedSubscription));
+    when(subscriptionGateway.latestSubscriptionOfAccount(eq(expectedAccount.id()))).thenReturn(Optional.of(expectedSubscription));
 
     // when
     var actualOutput =
-        this.target.execute(new ChargeSubscriptionTestInput(expectedAccount.id().value(),
-            expectedSubscription.id().value(), Payment.PIX, null));
+        this.target.execute(new ChargeSubscriptionTestInput(expectedAccount.id().value(), expectedSubscription.id().value(), Payment.PIX, null));
 
     // then
     Assertions.assertEquals(expectedSubscription.id(), actualOutput.subscriptionId());
@@ -89,21 +85,19 @@ class DefaultChargeSubscriptionTest extends UnitTest {
     var expectedPlan = Fixture.Plans.plus();
     var expectedAccount = Fixture.Accounts.john();
     var expectedStatus = SubscriptionStatus.ACTIVE;
-    var expectedSubscription = newSubscriptionWith(expectedAccount.id(), expectedPlan,
-        SubscriptionStatus.INCOMPLETE, referenceDate);
+    var expectedSubscription = newSubscriptionWith(expectedAccount.id(), expectedPlan, SubscriptionStatus.INCOMPLETE, referenceDate);
     var expectedDueDate = referenceDate.toLocalDate().plusMonths(1);
     var expectedTransaction = Transaction.success("TRS-123");
 
     when(clock.instant()).thenReturn(InstantUtils.now());
-    when(subscriptionGateway.subscriptionOfId(any())).thenReturn(Optional.of(expectedSubscription));
+    when(subscriptionGateway.latestSubscriptionOfAccount(any())).thenReturn(Optional.of(expectedSubscription));
     when(planGateway.planOfId(any())).thenReturn(Optional.of(expectedPlan));
     when(accountGateway.accountOfId(any())).thenReturn(Optional.of(expectedAccount));
     when(paymentGateway.processPayment(any())).thenReturn(expectedTransaction);
 
     // when
     var actualOutput =
-        this.target.execute(new ChargeSubscriptionTestInput(expectedAccount.id().value(),
-            expectedSubscription.id().value(), Payment.PIX, null));
+        this.target.execute(new ChargeSubscriptionTestInput(expectedAccount.id().value(), expectedSubscription.id().value(), Payment.PIX, null));
 
     // then
     Assertions.assertEquals(expectedSubscription.id(), actualOutput.subscriptionId());
@@ -111,7 +105,7 @@ class DefaultChargeSubscriptionTest extends UnitTest {
     Assertions.assertEquals(expectedDueDate, actualOutput.subscriptionDueDate());
     Assertions.assertEquals(expectedTransaction, actualOutput.paymentTransaction());
 
-    verify(subscriptionGateway, times(1)).subscriptionOfId(eq(expectedSubscription.id()));
+    verify(subscriptionGateway, times(1)).latestSubscriptionOfAccount(eq(expectedAccount.id()));
     verify(planGateway, times(1)).planOfId(eq(expectedPlan.id()));
     verify(accountGateway, times(1)).accountOfId(eq(expectedAccount.id()));
     verify(subscriptionGateway, times(1)).save(any());
@@ -130,21 +124,19 @@ class DefaultChargeSubscriptionTest extends UnitTest {
     var expectedPlan = Fixture.Plans.plus();
     var expectedAccount = Fixture.Accounts.john();
     var expectedStatus = SubscriptionStatus.ACTIVE;
-    var expectedSubscription = newSubscriptionWith(expectedAccount.id(), expectedPlan,
-        SubscriptionStatus.ACTIVE, referenceDate);
+    var expectedSubscription = newSubscriptionWith(expectedAccount.id(), expectedPlan, SubscriptionStatus.ACTIVE, referenceDate);
     var expectedDueDate = referenceDate.toLocalDate().plusMonths(1);
     var expectedTransaction = Transaction.success("TRS-123");
 
     when(clock.instant()).thenReturn(InstantUtils.now());
-    when(subscriptionGateway.subscriptionOfId(any())).thenReturn(Optional.of(expectedSubscription));
+    when(subscriptionGateway.latestSubscriptionOfAccount(any())).thenReturn(Optional.of(expectedSubscription));
     when(planGateway.planOfId(any())).thenReturn(Optional.of(expectedPlan));
     when(accountGateway.accountOfId(any())).thenReturn(Optional.of(expectedAccount));
     when(paymentGateway.processPayment(any())).thenReturn(expectedTransaction);
 
     // when
     var actualOutput =
-        this.target.execute(new ChargeSubscriptionTestInput(expectedAccount.id().value(),
-            expectedSubscription.id().value(), Payment.PIX, null));
+        this.target.execute(new ChargeSubscriptionTestInput(expectedAccount.id().value(), expectedSubscription.id().value(), Payment.PIX, null));
 
     // then
     Assertions.assertEquals(expectedSubscription.id(), actualOutput.subscriptionId());
@@ -152,7 +144,7 @@ class DefaultChargeSubscriptionTest extends UnitTest {
     Assertions.assertEquals(expectedDueDate, actualOutput.subscriptionDueDate());
     Assertions.assertEquals(expectedTransaction, actualOutput.paymentTransaction());
 
-    verify(subscriptionGateway, times(1)).subscriptionOfId(eq(expectedSubscription.id()));
+    verify(subscriptionGateway, times(1)).latestSubscriptionOfAccount(eq(expectedAccount.id()));
     verify(planGateway, times(1)).planOfId(eq(expectedPlan.id()));
     verify(accountGateway, times(1)).accountOfId(eq(expectedAccount.id()));
     verify(subscriptionGateway, times(1)).save(any());
@@ -171,21 +163,19 @@ class DefaultChargeSubscriptionTest extends UnitTest {
     var expectedPlan = Fixture.Plans.plus();
     var expectedAccount = Fixture.Accounts.john();
     var expectedStatus = SubscriptionStatus.INCOMPLETE;
-    var expectedSubscription = newSubscriptionWith(expectedAccount.id(), expectedPlan,
-        SubscriptionStatus.ACTIVE, referenceDate);
+    var expectedSubscription = newSubscriptionWith(expectedAccount.id(), expectedPlan, SubscriptionStatus.ACTIVE, referenceDate);
     var expectedDueDate = referenceDate.toLocalDate();
     var expectedTransaction = Transaction.failure("TRS-123", "No funds");
 
     when(clock.instant()).thenReturn(InstantUtils.now());
-    when(subscriptionGateway.subscriptionOfId(any())).thenReturn(Optional.of(expectedSubscription));
+    when(subscriptionGateway.latestSubscriptionOfAccount(any())).thenReturn(Optional.of(expectedSubscription));
     when(planGateway.planOfId(any())).thenReturn(Optional.of(expectedPlan));
     when(accountGateway.accountOfId(any())).thenReturn(Optional.of(expectedAccount));
     when(paymentGateway.processPayment(any())).thenReturn(expectedTransaction);
 
     // when
     var actualOutput =
-        this.target.execute(new ChargeSubscriptionTestInput(expectedAccount.id().value(),
-            expectedSubscription.id().value(), Payment.PIX, null));
+        this.target.execute(new ChargeSubscriptionTestInput(expectedAccount.id().value(), expectedSubscription.id().value(), Payment.PIX, null));
 
     // then
     Assertions.assertEquals(expectedSubscription.id(), actualOutput.subscriptionId());
@@ -193,7 +183,7 @@ class DefaultChargeSubscriptionTest extends UnitTest {
     Assertions.assertEquals(expectedDueDate, actualOutput.subscriptionDueDate());
     Assertions.assertEquals(expectedTransaction, actualOutput.paymentTransaction());
 
-    verify(subscriptionGateway, times(1)).subscriptionOfId(eq(expectedSubscription.id()));
+    verify(subscriptionGateway, times(1)).latestSubscriptionOfAccount(eq(expectedAccount.id()));
     verify(planGateway, times(1)).planOfId(eq(expectedPlan.id()));
     verify(accountGateway, times(1)).accountOfId(eq(expectedAccount.id()));
     verify(subscriptionGateway, times(1)).save(any());
@@ -202,8 +192,7 @@ class DefaultChargeSubscriptionTest extends UnitTest {
     var actualPayment = paymentCaptor.getValue();
     Assertions.assertInstanceOf(PixPayment.class, actualPayment);
     Assertions.assertNotNull(actualPayment.orderId());
-    Assertions.assertEquals(expectedPlan.price().amount(), actualPayment.amount());
-    verify(subscriptionGateway, times(1)).save(any());
+    Assertions.assertEquals(expectedPlan.price().amount(), actualPayment.amount());verify(subscriptionGateway, times(1)).save(any());
   }
 
   @Test
@@ -213,21 +202,19 @@ class DefaultChargeSubscriptionTest extends UnitTest {
     var expectedPlan = Fixture.Plans.plus();
     var expectedAccount = Fixture.Accounts.john();
     var expectedStatus = SubscriptionStatus.CANCELED;
-    var expectedSubscription = newSubscriptionWith(expectedAccount.id(), expectedPlan,
-        SubscriptionStatus.INCOMPLETE, referenceDate);
+    var expectedSubscription = newSubscriptionWith(expectedAccount.id(), expectedPlan, SubscriptionStatus.INCOMPLETE, referenceDate);
     var expectedDueDate = referenceDate.toLocalDate();
     var expectedTransaction = Transaction.failure("TRS-555", "No funds");
 
     when(clock.instant()).thenReturn(InstantUtils.now());
-    when(subscriptionGateway.subscriptionOfId(any())).thenReturn(Optional.of(expectedSubscription));
+    when(subscriptionGateway.latestSubscriptionOfAccount(any())).thenReturn(Optional.of(expectedSubscription));
     when(planGateway.planOfId(any())).thenReturn(Optional.of(expectedPlan));
     when(accountGateway.accountOfId(any())).thenReturn(Optional.of(expectedAccount));
     when(paymentGateway.processPayment(any())).thenReturn(expectedTransaction);
 
     // when
     var actualOutput =
-        this.target.execute(new ChargeSubscriptionTestInput(expectedAccount.id().value(),
-            expectedSubscription.id().value(), Payment.PIX, null));
+        this.target.execute(new ChargeSubscriptionTestInput(expectedAccount.id().value(), expectedSubscription.id().value(), Payment.PIX, null));
 
     // then
     Assertions.assertEquals(expectedSubscription.id(), actualOutput.subscriptionId());
@@ -235,7 +222,7 @@ class DefaultChargeSubscriptionTest extends UnitTest {
     Assertions.assertEquals(expectedDueDate, actualOutput.subscriptionDueDate());
     Assertions.assertEquals(expectedTransaction, actualOutput.paymentTransaction());
 
-    verify(subscriptionGateway, times(1)).subscriptionOfId(eq(expectedSubscription.id()));
+    verify(subscriptionGateway, times(1)).latestSubscriptionOfAccount(eq(expectedAccount.id()));
     verify(planGateway, times(1)).planOfId(eq(expectedPlan.id()));
     verify(accountGateway, times(1)).accountOfId(eq(expectedAccount.id()));
     verify(subscriptionGateway, times(1)).save(any());
@@ -247,8 +234,7 @@ class DefaultChargeSubscriptionTest extends UnitTest {
     Assertions.assertEquals(expectedPlan.price().amount(), actualPayment.amount());
   }
 
-  private static Subscription newSubscriptionWith(AccountId expectedAccountId, Plan plus,
-      String status, LocalDateTime date) {
+  private static Subscription newSubscriptionWith(AccountId expectedAccountId, Plan plus, String status, LocalDateTime date) {
     final var instant = date.toInstant(ZoneOffset.UTC);
     return Subscription.with(
         new SubscriptionId("SUB123"), 1, expectedAccountId, plus.id(),
@@ -263,7 +249,5 @@ class DefaultChargeSubscriptionTest extends UnitTest {
       String subscriptionId,
       String paymentType,
       String creditCardToken
-  ) implements ChargeSubscription.Input {
-
-  }
+  ) implements ChargeSubscription.Input {}
 }
