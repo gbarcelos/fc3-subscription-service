@@ -10,7 +10,7 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.stereotype.Component;
 
-@Component
+//@Component
 public class AccountInMemoryRepository implements AccountGateway {
 
   private Map<String, Account> db = new ConcurrentHashMap<>();
