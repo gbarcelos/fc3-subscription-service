@@ -43,7 +43,7 @@ public class AccountTest extends UnitTest {
     Assertions.assertNull(actualAccount.billingAddress());
 
     Assertions.assertEquals(expectedEvents, actualAccount.domainEvents().size());
-    Assertions.assertInstanceOf(AccountEvent.AccountCreated.class,
+    Assertions.assertInstanceOf(AccountCreated.class,
         actualAccount.domainEvents().getFirst());
   }
 

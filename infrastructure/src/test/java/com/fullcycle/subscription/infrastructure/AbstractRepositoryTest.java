@@ -1,6 +1,7 @@
 package com.fullcycle.subscription.infrastructure;
 
 import com.fullcycle.subscription.infrastructure.gateway.repository.AccountJdbcRepository;
+import com.fullcycle.subscription.infrastructure.gateway.repository.EventJdbcRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +19,12 @@ public class AbstractRepositoryTest extends AbstractTest {
   private JdbcClient jdbcClient;
 
   private AccountJdbcRepository accountRepository;
+  private EventJdbcRepository eventRepository;
 
   @BeforeEach
   void setUp() {
-    this.accountRepository = new AccountJdbcRepository(jdbcClient);
+    this.eventRepository = new EventJdbcRepository(jdbcClient);
+    this.accountRepository = new AccountJdbcRepository(jdbcClient, eventRepository);
   }
 
   protected int countAccounts() {
@@ -30,6 +33,10 @@ public class AbstractRepositoryTest extends AbstractTest {
 
   protected AccountJdbcRepository accountRepository() {
     return this.accountRepository;
+  }
+
+  protected EventJdbcRepository eventRepository() {
+    return eventRepository;
   }
 
 }

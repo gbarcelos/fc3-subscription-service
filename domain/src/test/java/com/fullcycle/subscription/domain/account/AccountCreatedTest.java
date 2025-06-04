@@ -26,7 +26,7 @@ public class AccountCreatedTest {
         expectedName, expectedDocument);
 
     // when
-    var actualEvent = new AccountEvent.AccountCreated(actualAccount);
+    var actualEvent = new AccountCreated(actualAccount);
 
     // then
     Assertions.assertNotNull(actualAccount);
@@ -51,7 +51,7 @@ public class AccountCreatedTest {
     // when
     var actualError = Assertions.assertThrows(
         DomainException.class,
-        () -> new AccountEvent.AccountCreated(expectedAccountId, expectedEmail, expectedName,
+        () -> new AccountCreated(expectedAccountId, expectedEmail, expectedName,
             expectedOccurredOn)
     );
 
@@ -72,7 +72,7 @@ public class AccountCreatedTest {
     // when
     var actualError = Assertions.assertThrows(
         DomainException.class,
-        () -> new AccountEvent.AccountCreated(expectedAccountId, expectedEmail, expectedName,
+        () -> new AccountCreated(expectedAccountId, expectedEmail, expectedName,
             expectedOccurredOn)
     );
 
@@ -93,7 +93,7 @@ public class AccountCreatedTest {
     // when
     var actualError = Assertions.assertThrows(
         DomainException.class,
-        () -> new AccountEvent.AccountCreated(expectedAccountId, expectedEmail, expectedName,
+        () -> new AccountCreated(expectedAccountId, expectedEmail, expectedName,
             expectedOccurredOn)
     );
 
@@ -114,7 +114,7 @@ public class AccountCreatedTest {
     // when
     var actualError = Assertions.assertThrows(
         DomainException.class,
-        () -> new AccountEvent.AccountCreated(expectedAccountId, expectedEmail, expectedName,
+        () -> new AccountCreated(expectedAccountId, expectedEmail, expectedName,
             expectedOccurredOn)
     );
 
