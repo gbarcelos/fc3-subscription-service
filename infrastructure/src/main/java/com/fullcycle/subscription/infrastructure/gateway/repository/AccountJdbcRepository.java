@@ -9,11 +9,13 @@ import com.fullcycle.subscription.domain.person.Document;
 import com.fullcycle.subscription.domain.person.Email;
 import com.fullcycle.subscription.domain.person.Name;
 import com.fullcycle.subscription.domain.utils.IdUtils;
+import com.fullcycle.subscription.infrastructure.jdbc.DatabaseClient;
+import com.fullcycle.subscription.infrastructure.jdbc.RowMap;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,11 +24,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 public class AccountJdbcRepository implements AccountGateway {
 
-  private final JdbcClient jdbcClient;
+  private final DatabaseClient database;
   private final EventJdbcRepository eventJdbcRepository;
 
-  public AccountJdbcRepository(final JdbcClient jdbcClient, final EventJdbcRepository eventJdbcRepository) {
-    this.jdbcClient = Objects.requireNonNull(jdbcClient);
+  public AccountJdbcRepository(final DatabaseClient database, final EventJdbcRepository eventJdbcRepository) {
+    this.database = Objects.requireNonNull(database);
     this.eventJdbcRepository = Objects.requireNonNull(eventJdbcRepository);
   }
 
@@ -43,7 +45,7 @@ public class AccountJdbcRepository implements AccountGateway {
         FROM accounts
         WHERE id = :id
         """;
-    return this.jdbcClient.sql(sql).param("id", anId.value()).query(accountMapper()).optional();
+    return this.database.queryOne(sql, Map.of("id", anId.value()), accountMapper());
   }
 
   @Override
@@ -111,28 +113,28 @@ public class AccountJdbcRepository implements AccountGateway {
     params.put("addressCountry", address != null ? address.country() : "");
     params.put("id", account.id().value());
 
-    return this.jdbcClient.sql(sql).params(params).update();
+    return this.database.update(sql, params);
   }
 
-  private RowMapper<Account> accountMapper() {
-    return (rs, rowNum) -> {
-      String addressZipCode = rs.getString("address_zip_code");
+  private RowMap<Account> accountMapper() {
+    return (rs) -> {
+      final var zipCode = rs.getString("address_zip_code");
       return Account.with(
-            new AccountId(rs.getString("id")),
+          new AccountId(rs.getString("id")),
           rs.getInt("version"),
           new UserId(rs.getString("idp_user_id")),
           new Email(rs.getString("email")),
           new Name(rs.getString("firstname"), rs.getString("lastname")),
           Document.create(rs.getString("document_number"), rs.getString("document_type")),
-          addressZipCode != null && !addressZipCode.isBlank() ?
+          zipCode != null && !zipCode.isBlank() ?
               new Address(
-                  addressZipCode,
+                  zipCode,
                   rs.getString("address_number"),
                   rs.getString("address_complement"),
                   rs.getString("address_country")
-              ) : null
+              ) :
+              null
       );
     };
   }
-
 }

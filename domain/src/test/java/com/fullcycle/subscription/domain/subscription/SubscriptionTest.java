@@ -5,12 +5,13 @@ import com.fullcycle.subscription.domain.account.AccountId;
 import com.fullcycle.subscription.domain.plan.PlanId;
 import com.fullcycle.subscription.domain.subscription.status.SubscriptionStatus;
 import com.fullcycle.subscription.domain.utils.InstantUtils;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.UUID;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
 
 /**
  * 1. Caminho feliz de um novo agregado
@@ -50,7 +51,8 @@ public class SubscriptionTest {
     Assertions.assertNotNull(actualSubscription.updatedAt());
 
     Assertions.assertEquals(expectedEvents, actualSubscription.domainEvents().size());
-    Assertions.assertInstanceOf(SubscriptionCreated.class, actualSubscription.domainEvents().getFirst());
+    Assertions.assertInstanceOf(SubscriptionCreated.class,
+        actualSubscription.domainEvents().getFirst());
   }
 
   @Test
@@ -98,7 +100,8 @@ public class SubscriptionTest {
   }
 
   @Test
-  public void givenTrialingSubscription_whenExecuteIncompleteCommand_ShouldTransitToIncompleteState() {
+  public void givenTrialingSubscription_whenExecuteIncompleteCommand_ShouldTransitToIncompleteState()
+      throws InterruptedException {
     // given
     var expectedId = new SubscriptionId("SUB123");
     var expectedVersion = 0;
@@ -127,7 +130,10 @@ public class SubscriptionTest {
     );
 
     // when
-    actualSubscription.execute(new SubscriptionCommand.IncompleteSubscription(expectedReason, expectedLastTransactionId));
+    Thread.sleep(1);
+
+    actualSubscription.execute(
+        new SubscriptionCommand.IncompleteSubscription(expectedReason, expectedLastTransactionId));
 
     // then
     Assertions.assertNotNull(actualSubscription);
@@ -143,11 +149,13 @@ public class SubscriptionTest {
     Assertions.assertTrue(actualSubscription.updatedAt().isAfter(expectedUpdatedAt));
 
     Assertions.assertEquals(expectedEvents, actualSubscription.domainEvents().size());
-    Assertions.assertInstanceOf(SubscriptionIncomplete.class, actualSubscription.domainEvents().getFirst());
+    Assertions.assertInstanceOf(SubscriptionIncomplete.class,
+        actualSubscription.domainEvents().getFirst());
   }
 
   @Test
-  public void givenTrialingSubscription_whenExecuteRenewCommand_ShouldTransitToActiveState() {
+  public void givenTrialingSubscription_whenExecuteRenewCommand_ShouldTransitToActiveState()
+      throws InterruptedException {
     // given
     var expectedPlan = Fixture.Plans.plus();
 
@@ -174,9 +182,11 @@ public class SubscriptionTest {
         expectedCreatedAt,
         expectedUpdatedAt
     );
+    Thread.sleep(1000L);
 
     // when
-    actualSubscription.execute(new SubscriptionCommand.RenewSubscription(expectedPlan, expectedLastTransactionId));
+    actualSubscription.execute(
+        new SubscriptionCommand.RenewSubscription(expectedPlan, expectedLastTransactionId));
 
     // then
     Assertions.assertNotNull(actualSubscription);
@@ -192,11 +202,13 @@ public class SubscriptionTest {
     Assertions.assertTrue(actualSubscription.updatedAt().isAfter(expectedUpdatedAt));
 
     Assertions.assertEquals(expectedEvents, actualSubscription.domainEvents().size());
-    Assertions.assertInstanceOf(SubscriptionRenewed.class, actualSubscription.domainEvents().getFirst());
+    Assertions.assertInstanceOf(SubscriptionRenewed.class,
+        actualSubscription.domainEvents().getFirst());
   }
 
   @Test
-  public void givenTrialingSubscription_whenExecuteCancelCommand_ShouldTransitToCanceledState() throws InterruptedException {
+  public void givenTrialingSubscription_whenExecuteCancelCommand_ShouldTransitToCanceledState()
+      throws InterruptedException {
     // given
     var expectedId = new SubscriptionId("SUB123");
     var expectedVersion = 0;
@@ -225,6 +237,7 @@ public class SubscriptionTest {
 
     // when
     Thread.sleep(1);
+
     actualSubscription.execute(new SubscriptionCommand.CancelSubscription());
 
     // then
@@ -241,6 +254,7 @@ public class SubscriptionTest {
     Assertions.assertTrue(actualSubscription.updatedAt().isAfter(expectedUpdatedAt));
 
     Assertions.assertEquals(expectedEvents, actualSubscription.domainEvents().size());
-    Assertions.assertInstanceOf(SubscriptionCanceled.class, actualSubscription.domainEvents().getFirst());
+    Assertions.assertInstanceOf(SubscriptionCanceled.class,
+        actualSubscription.domainEvents().getFirst());
   }
 }
