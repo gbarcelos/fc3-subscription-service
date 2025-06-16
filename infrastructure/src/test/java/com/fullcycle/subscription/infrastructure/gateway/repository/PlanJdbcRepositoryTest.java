@@ -3,6 +3,8 @@ package com.fullcycle.subscription.infrastructure.gateway.repository;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.fullcycle.subscription.domain.money.Money;
 import com.fullcycle.subscription.domain.plan.Plan;
@@ -49,6 +51,54 @@ class PlanJdbcRepositoryTest extends AbstractRepositoryTest {
     assertEquals(expectedCreatedAt, actualPlan.createdAt());
     assertEquals(expectedUpdatedAt, actualPlan.updatedAt());
     assertEquals(expectedDeletedAt, actualPlan.deletedAt());
+  }
+
+  @Test
+  @Sql({"classpath:/sql/plans/seed-plans.sql"})
+  public void givenPersistedPlans_whenQueriesSuccessfully_shouldReturnIt() {
+    // given
+    Assertions.assertEquals(2, countPlans());
+
+    // when
+    var actualPlans = this.planRepository().allPlans();
+
+    // then
+    var planFree = actualPlans.getFirst();
+    assertEquals(new PlanId(1L), planFree.id());
+    assertEquals(5, planFree.version());
+    assertEquals("Free", planFree.name());
+    assertEquals("Grátis para projetos pessoais", planFree.description());
+    assertTrue(planFree.active());
+    assertEquals(new Money("BRL", 0D), planFree.price());
+    assertEquals(Instant.parse("2024-04-28T10:57:11.111Z"), planFree.createdAt());
+    assertEquals(Instant.parse("2024-04-28T10:58:11.111Z"), planFree.updatedAt());
+    assertNull(planFree.deletedAt());
+
+    var planPlus = actualPlans.getLast();
+    assertEquals(new PlanId(2L), planPlus.id());
+    assertEquals(3, planPlus.version());
+    assertEquals("Plus", planPlus.name());
+    assertEquals("O plano top", planPlus.description());
+    assertFalse(planPlus.active());
+    assertEquals(new Money("BRL", 20D), planPlus.price());
+    assertEquals(Instant.parse("2024-04-28T10:57:11.111Z"), planPlus.createdAt());
+    assertEquals(Instant.parse("2024-04-28T10:58:11.111Z"), planPlus.updatedAt());
+    assertEquals(Instant.parse("2024-04-28T10:59:11.111Z"), planPlus.deletedAt());
+  }
+
+  @Test
+  public void givenEmptyTable_whenQueriesSuccessfully_shouldReturnThatNotExists() {
+    // given
+    Assertions.assertEquals(0, countPlans());
+
+    var expectedExists = false;
+    var expectedId = new PlanId(1L);
+
+    // when
+    var actualPlan = this.planRepository().existsPlanOfId(expectedId);
+
+    // then
+    assertEquals(expectedExists, actualPlan);
   }
 
   @Test
@@ -152,5 +202,4 @@ class PlanJdbcRepositoryTest extends AbstractRepositoryTest {
     assertEquals(expectedUpdatedAt, actualPlan.updatedAt());
     assertEquals(expectedDeletedAt, actualPlan.deletedAt());
   }
-
 }
