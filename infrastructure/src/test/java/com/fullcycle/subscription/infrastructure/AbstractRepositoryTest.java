@@ -3,6 +3,7 @@ package com.fullcycle.subscription.infrastructure;
 import com.fullcycle.subscription.infrastructure.gateway.repository.AccountJdbcRepository;
 import com.fullcycle.subscription.infrastructure.gateway.repository.EventJdbcRepository;
 import com.fullcycle.subscription.infrastructure.gateway.repository.PlanJdbcRepository;
+import com.fullcycle.subscription.infrastructure.gateway.repository.SubscriptionJdbcRepository;
 import com.fullcycle.subscription.infrastructure.jdbc.JdbcClientAdapter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
@@ -17,6 +18,7 @@ public class AbstractRepositoryTest extends AbstractTest {
 
   private static final String ACCOUNTS_TABLE = "accounts";
   private static final String PLAN_TABLE = "plans";
+  private static final String SUBSCRIPTION_TABLE = "subscriptions";
 
   @Autowired
   private JdbcClient jdbcClient;
@@ -24,6 +26,7 @@ public class AbstractRepositoryTest extends AbstractTest {
   private AccountJdbcRepository accountRepository;
   private EventJdbcRepository eventRepository;
   private PlanJdbcRepository planRepository;
+  private SubscriptionJdbcRepository subscriptionRepository;
 
   @BeforeEach
   void setUp() {
@@ -31,6 +34,7 @@ public class AbstractRepositoryTest extends AbstractTest {
     this.accountRepository = new AccountJdbcRepository(new JdbcClientAdapter(jdbcClient),
         eventRepository);
     this.planRepository = new PlanJdbcRepository(new JdbcClientAdapter(jdbcClient));
+    this.subscriptionRepository = new SubscriptionJdbcRepository(new JdbcClientAdapter(jdbcClient), eventRepository);
   }
 
   protected int countAccounts() {
@@ -39,6 +43,10 @@ public class AbstractRepositoryTest extends AbstractTest {
 
   protected int countPlans() {
     return JdbcTestUtils.countRowsInTable(jdbcClient, PLAN_TABLE);
+  }
+
+  protected int countSubscriptions() {
+    return JdbcTestUtils.countRowsInTable(jdbcClient, SUBSCRIPTION_TABLE);
   }
 
   protected AccountJdbcRepository accountRepository() {
@@ -51,5 +59,9 @@ public class AbstractRepositoryTest extends AbstractTest {
 
   protected PlanJdbcRepository planRepository() {
     return planRepository;
+  }
+
+  public SubscriptionJdbcRepository subscriptionRepository() {
+    return subscriptionRepository;
   }
 }

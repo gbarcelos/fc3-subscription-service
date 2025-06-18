@@ -10,9 +10,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import org.springframework.stereotype.Component;
 
-@Component
 public class SubscriptionInMemoryRepository implements SubscriptionGateway {
 
   private final Map<String, Subscription> db = new ConcurrentHashMap<>();
