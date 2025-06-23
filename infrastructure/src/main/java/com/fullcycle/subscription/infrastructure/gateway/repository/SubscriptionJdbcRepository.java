@@ -5,6 +5,7 @@ import com.fullcycle.subscription.domain.plan.PlanId;
 import com.fullcycle.subscription.domain.subscription.Subscription;
 import com.fullcycle.subscription.domain.subscription.SubscriptionGateway;
 import com.fullcycle.subscription.domain.subscription.SubscriptionId;
+import com.fullcycle.subscription.domain.utils.IdUtils;
 import com.fullcycle.subscription.infrastructure.jdbc.DatabaseClient;
 import com.fullcycle.subscription.infrastructure.jdbc.RowMap;
 import java.time.Instant;
@@ -26,23 +27,24 @@ public class SubscriptionJdbcRepository implements SubscriptionGateway {
   }
 
   @Override
-  public Optional<Subscription> latestSubscriptionOfAccount(AccountId accountId) {
-    return Optional.empty();
+  public SubscriptionId nextId() {
+    return new SubscriptionId(IdUtils.uniqueId());
   }
 
   @Override
-  public Optional<Subscription> subscriptionOfId(SubscriptionId subscriptionId) {
+  public Optional<Subscription> latestSubscriptionOfAccount(final AccountId accountId) {
+    final var sql = "SELECT id, version, account_id, plan_id, status, created_at, updated_at, due_date, last_renew_dt, last_transaction_id FROM subscriptions WHERE account_id = :accountId";
+    return this.database.queryOne(sql, Map.of("accountId", accountId.value()), subscriptionMapper());
+  }
+
+  @Override
+  public Optional<Subscription> subscriptionOfId(final SubscriptionId subscriptionId) {
     final var sql = "SELECT id, version, account_id, plan_id, status, created_at, updated_at, due_date, last_renew_dt, last_transaction_id FROM subscriptions WHERE id = :id";
     return this.database.queryOne(sql, Map.of("id", subscriptionId.value()), subscriptionMapper());
   }
 
   @Override
-  public Subscription save(Subscription subscription) {
-    return null;
-  }
-
-  @Override
-  public SubscriptionId nextId() {
+  public Subscription save(final Subscription subscription) {
     return null;
   }
 
