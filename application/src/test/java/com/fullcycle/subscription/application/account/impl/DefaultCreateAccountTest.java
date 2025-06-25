@@ -34,12 +34,11 @@ class DefaultCreateAccountTest extends UnitTest {
     var expectedUserId = new UserId("123");
     var expectedAccountId = new AccountId("ACC-123");
 
-    when(accountGateway.nextId()).thenReturn(expectedAccountId);
     when(accountGateway.save(any())).thenAnswer(returnsFirstArg());
 
     // when
     var actualOutput = this.target.execute(
-        new CreateAccountTestInput(expectedUserId.value(), expectedFirstname, expectedLastname,
+        new CreateAccountTestInput(expectedUserId.value(), expectedAccountId.value(), expectedFirstname, expectedLastname,
             expectedEmail, expectedDocumentType, expectedDocumentNumber));
 
     // then
@@ -48,6 +47,7 @@ class DefaultCreateAccountTest extends UnitTest {
 
   record CreateAccountTestInput(
       String userId,
+      String accountId,
       String firstname,
       String lastname,
       String email,

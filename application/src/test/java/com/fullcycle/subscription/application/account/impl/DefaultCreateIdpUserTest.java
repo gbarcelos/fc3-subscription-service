@@ -23,6 +23,7 @@ class DefaultCreateIdpUserTest extends UnitTest {
   @Test
   public void givenValidInput_whenCallsExecute_shouldReturnUserID() {
     // given
+    var expectedAccountId = "ACC-123";
     var expectedFirstname = "John";
     var expectedLastname = "Doe";
     var expectedEmail = "john@gmail.com";
@@ -33,14 +34,14 @@ class DefaultCreateIdpUserTest extends UnitTest {
 
     // when
     var actualOutput = this.target.execute(
-        new CreateIdpUserTestInput(expectedFirstname, expectedLastname, expectedEmail,
+        new CreateIdpUserTestInput(expectedAccountId, expectedFirstname, expectedLastname, expectedEmail,
             expectedPassword));
 
     // then
     Assertions.assertEquals(expectedUserId, actualOutput.idpUserId());
   }
 
-  record CreateIdpUserTestInput(String firstname, String lastname, String email,
+  record CreateIdpUserTestInput(String accountId, String firstname, String lastname, String email,
                                 String password) implements CreateIdpUser.Input {
 
   }
