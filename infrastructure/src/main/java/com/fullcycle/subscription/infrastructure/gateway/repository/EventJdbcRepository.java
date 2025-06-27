@@ -37,7 +37,7 @@ public class EventJdbcRepository {
     for (var ev : events) {
       this.insertEvent(
           Event.newEvent(ev.aggregateId(), ev.aggregateType(), ev.getClass().getCanonicalName(),
-              Json.writeValueAsBytes(ev)));
+              Json.writeValueAsString(ev)));
     }
   }
 
@@ -57,7 +57,7 @@ public class EventJdbcRepository {
 
   private DomainEvent toDomainEvent(final Event event) {
     try {
-      return (DomainEvent) Json.readValue(event.eventData(), Class.forName(event.eventType()));
+      return (DomainEvent) Json.readTree(event.eventData(), Class.forName(event.eventType()));
     } catch (ClassNotFoundException e) {
       throw new RuntimeException(e);
     }
@@ -71,7 +71,7 @@ public class EventJdbcRepository {
         rs.getString("aggregate_type"),
         rs.getString("event_type"),
         rs.getObject("event_date", Instant.class),
-        rs.getBytes("event_data")
+        rs.getString("event_data")
     );
   }
 
@@ -82,11 +82,11 @@ public class EventJdbcRepository {
       String aggregateType,
       String eventType,
       Instant eventDate,
-      byte[] eventData
+      String eventData
   ) {
 
     public static Event newEvent(String aggregateId, String aggregateType, String eventType,
-        byte[] data) {
+        String data) {
       return new Event(null, false, aggregateId, aggregateType, eventType, InstantUtils.now(),
           data);
     }
