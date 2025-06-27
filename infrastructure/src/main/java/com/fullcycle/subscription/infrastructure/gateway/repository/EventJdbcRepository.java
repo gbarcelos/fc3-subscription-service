@@ -3,6 +3,7 @@ package com.fullcycle.subscription.infrastructure.gateway.repository;
 import com.fullcycle.subscription.domain.DomainEvent;
 import com.fullcycle.subscription.domain.utils.InstantUtils;
 import com.fullcycle.subscription.infrastructure.jdbc.DatabaseClient;
+import com.fullcycle.subscription.infrastructure.jdbc.JdbcUtils;
 import com.fullcycle.subscription.infrastructure.jdbc.RowMap;
 import com.fullcycle.subscription.infrastructure.json.Json;
 import java.time.Instant;
@@ -70,7 +71,7 @@ public class EventJdbcRepository {
         rs.getString("aggregate_id"),
         rs.getString("aggregate_type"),
         rs.getString("event_type"),
-        rs.getObject("event_date", Instant.class),
+        JdbcUtils.getInstant(rs, "event_date"),
         rs.getString("event_data")
     );
   }
