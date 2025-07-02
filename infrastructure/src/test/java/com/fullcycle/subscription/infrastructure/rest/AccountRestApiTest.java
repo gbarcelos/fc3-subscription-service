@@ -1,5 +1,6 @@
 package com.fullcycle.subscription.infrastructure.rest;
 
+import com.fullcycle.subscription.application.account.UpdateBillingInfo;
 import com.fullcycle.subscription.domain.account.AccountId;
 import com.fullcycle.subscription.domain.person.Document;
 import com.fullcycle.subscription.infrastructure.ControllerTest;
@@ -32,6 +33,9 @@ public class AccountRestApiTest {
   @MockBean
   private SignUpMediator signUpMediator;
 
+  @MockBean
+  private UpdateBillingInfo updateBillingInfo;
+
   @Captor
   private ArgumentCaptor<SignUpRequest> signUpRequestCaptor;
 
@@ -49,15 +53,16 @@ public class AccountRestApiTest {
     when(signUpMediator.signUp(any())).thenReturn(new SignUpResponse(expectedAccountId.value()));
 
     var json = """
-                {
-                    "firstname": "%s",
-                    "lastname": "%s",
-                    "email": "%s",
-                    "document_type": "%s",
-                    "document_number": "%s",
-                    "password": "%s"
-                }
-                """.formatted(expectedFirstname, expectedLastname, expectedEmail, expectedDocumentType, expectedDocumentNumber, expectedPassword);
+        {
+            "firstname": "%s",
+            "lastname": "%s",
+            "email": "%s",
+            "document_type": "%s",
+            "document_number": "%s",
+            "password": "%s"
+        }
+        """.formatted(expectedFirstname, expectedLastname, expectedEmail, expectedDocumentType,
+        expectedDocumentNumber, expectedPassword);
 
     // when
     var aRequest = post("/accounts/sign-up")
@@ -99,15 +104,16 @@ public class AccountRestApiTest {
     var expectedErrorMessage = "must not be blank";
 
     var json = """
-                {
-                    "firstname": "%s",
-                    "lastname": "%s",
-                    "email": "%s",
-                    "document_type": "%s",
-                    "document_number": "%s",
-                    "password": "%s"
-                }
-                """.formatted(expectedFirstname, expectedLastname, expectedEmail, expectedDocumentType, expectedDocumentNumber, expectedPassword);
+        {
+            "firstname": "%s",
+            "lastname": "%s",
+            "email": "%s",
+            "document_type": "%s",
+            "document_number": "%s",
+            "password": "%s"
+        }
+        """.formatted(expectedFirstname, expectedLastname, expectedEmail, expectedDocumentType,
+        expectedDocumentNumber, expectedPassword);
 
     // when
     var aRequest = post("/accounts/sign-up")

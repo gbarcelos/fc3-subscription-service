@@ -6,6 +6,7 @@ import com.fullcycle.subscription.domain.money.Money;
 import com.fullcycle.subscription.domain.plan.PlanCommand;
 import com.fullcycle.subscription.domain.plan.PlanGateway;
 import com.fullcycle.subscription.domain.plan.PlanId;
+
 import java.util.Objects;
 
 public class DefaultChangePlan extends ChangePlan {

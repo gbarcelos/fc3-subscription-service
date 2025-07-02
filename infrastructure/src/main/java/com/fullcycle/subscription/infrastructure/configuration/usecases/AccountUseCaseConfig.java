@@ -4,10 +4,12 @@ import com.fullcycle.subscription.application.account.AddToGroup;
 import com.fullcycle.subscription.application.account.CreateAccount;
 import com.fullcycle.subscription.application.account.CreateIdpUser;
 import com.fullcycle.subscription.application.account.RemoveFromGroup;
+import com.fullcycle.subscription.application.account.UpdateBillingInfo;
 import com.fullcycle.subscription.application.account.impl.DefaultAddToGroup;
 import com.fullcycle.subscription.application.account.impl.DefaultCreateAccount;
 import com.fullcycle.subscription.application.account.impl.DefaultCreateIdpUser;
 import com.fullcycle.subscription.application.account.impl.DefaultRemoveFromGroup;
+import com.fullcycle.subscription.application.account.impl.DefaultUpdateBillingInfo;
 import com.fullcycle.subscription.domain.account.AccountGateway;
 import com.fullcycle.subscription.domain.account.idp.IdentityProviderGateway;
 import com.fullcycle.subscription.domain.subscription.SubscriptionGateway;
@@ -43,5 +45,10 @@ public class AccountUseCaseConfig {
       final SubscriptionGateway subscriptionGateway
   ) {
     return new DefaultRemoveFromGroup(accountGateway, identityProviderGateway, subscriptionGateway);
+  }
+
+  @Bean
+  UpdateBillingInfo updateBillingInfo(final AccountGateway accountGateway) {
+    return new DefaultUpdateBillingInfo(accountGateway);
   }
 }

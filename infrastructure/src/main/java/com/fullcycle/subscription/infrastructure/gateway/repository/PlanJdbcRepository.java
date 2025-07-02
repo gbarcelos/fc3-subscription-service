@@ -7,7 +7,6 @@ import com.fullcycle.subscription.domain.plan.PlanId;
 import com.fullcycle.subscription.infrastructure.jdbc.DatabaseClient;
 import com.fullcycle.subscription.infrastructure.jdbc.JdbcUtils;
 import com.fullcycle.subscription.infrastructure.jdbc.RowMap;
-import java.time.Instant;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

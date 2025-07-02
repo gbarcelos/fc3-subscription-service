@@ -18,8 +18,7 @@ public class DefaultCreatePlan extends CreatePlan {
 
   @Override
   public CreatePlan.Output execute(final CreatePlan.Input in) {
-    final var aPlan = newPlanWith(in);
-    this.planGateway.save(aPlan);
+    final var aPlan = this.planGateway.save(newPlanWith(in));
     return new StdOutput(aPlan.id());
   }
 
@@ -31,5 +30,7 @@ public class DefaultCreatePlan extends CreatePlan {
     );
   }
 
-  record StdOutput(PlanId planId) implements CreatePlan.Output {}
+  record StdOutput(PlanId planId) implements CreatePlan.Output {
+
+  }
 }
