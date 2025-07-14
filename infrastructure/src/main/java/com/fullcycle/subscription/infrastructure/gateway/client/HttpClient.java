@@ -24,26 +24,21 @@ public interface HttpClient {
 
   default ErrorHandler notFoundHandler(final String id) {
     return (req, res) -> {
-      throw NotFoundException.with(
-          "Not found observed from %s [resourceId:%s]".formatted(namespace(), id));
+      throw NotFoundException.with("Not found observed from %s [resourceId:%s]".formatted(namespace(), id));
     };
   }
 
   default ErrorHandler a5xxHandler(final String id) {
     return (req, res) -> {
-      throw InternalErrorException.with(
-          "Error observed from %s [resourceId:%s] [status:%s]".formatted(namespace(), id,
-              res.getStatusCode().value()));
+      throw InternalErrorException.with("Error observed from %s [resourceId:%s] [status:%s]".formatted(namespace(), id, res.getStatusCode().value()));
     };
   }
 
   default <T> Optional<T> doGet(final String id, final Supplier<T> fn) {
     try {
       return Optional.ofNullable(fn.get());
-
     } catch (NotFoundException ex) {
       return Optional.empty();
-
     } catch (ResourceAccessException ex) {
       throw handleResourceAccessException(id, ex);
     } catch (Throwable t) {
@@ -51,21 +46,17 @@ public interface HttpClient {
     }
   }
 
-  private InternalErrorException handleResourceAccessException(String id,
-      ResourceAccessException ex) {
+  private InternalErrorException handleResourceAccessException(final String id, final ResourceAccessException ex) {
     final var cause = ExceptionUtils.getRootCause(ex);
     if (cause instanceof HttpConnectTimeoutException) {
-      return InternalErrorException.with(
-          "ConnectTimeout observed from %s [resourceId:%s]".formatted(namespace(), id), ex);
+      return InternalErrorException.with("ConnectTimeout observed from %s [resourceId:%s]".formatted(namespace(), id), ex);
     }
 
     if (cause instanceof HttpTimeoutException || cause instanceof TimeoutException) {
-      return InternalErrorException.with(
-          "Timeout observed from %s [resourceId:%s]".formatted(namespace(), id), ex);
+      return InternalErrorException.with("Timeout observed from %s [resourceId:%s]".formatted(namespace(), id), ex);
     }
 
-    return InternalErrorException.with(
-        "Error observed from %s [resourceId:%s]".formatted(namespace(), id), ex);
+    return InternalErrorException.with("Error observed from %s [resourceId:%s]".formatted(namespace(), id), ex);
   }
 
   private InternalErrorException handleThrowable(final String id, final Throwable t) {
@@ -73,7 +64,6 @@ public interface HttpClient {
       return ex;
     }
 
-    return InternalErrorException.with(
-        "Unhandled error observed from %s [resourceId:%s]".formatted(namespace(), id), t);
+    return InternalErrorException.with("Unhandled error observed from %s [resourceId:%s]".formatted(namespace(), id), t);
   }
 }

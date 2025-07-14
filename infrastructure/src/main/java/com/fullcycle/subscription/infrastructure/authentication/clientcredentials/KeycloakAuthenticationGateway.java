@@ -3,11 +3,12 @@ package com.fullcycle.subscription.infrastructure.authentication.clientcredentia
 import com.fullcycle.subscription.domain.exceptions.InternalErrorException;
 import com.fullcycle.subscription.infrastructure.configuration.annotations.Keycloak;
 import com.fullcycle.subscription.infrastructure.configuration.properties.KeycloakProperties;
-import java.util.Objects;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.client.RestClient;
+
+import java.util.Objects;
 
 @Component
 public class KeycloakAuthenticationGateway implements AuthenticationGateway {
@@ -24,7 +25,7 @@ public class KeycloakAuthenticationGateway implements AuthenticationGateway {
   }
 
   @Override
-  public AuthenticationResult login(ClientCredentialsInput input) {
+  public AuthenticationResult login(final ClientCredentialsInput input) {
     final var map = new LinkedMultiValueMap<>();
     map.set("grant_type", "client_credentials");
     map.set("client_id", input.clientId());
@@ -39,14 +40,15 @@ public class KeycloakAuthenticationGateway implements AuthenticationGateway {
         .body(KeycloakAuthenticationResult.class);
 
     if (output == null) {
-      throw InternalErrorException.with("Failed to create client credentials [clientId:%s]".formatted(input.clientId()));
+      throw InternalErrorException.with(
+          "Failed to create client credentials [clientId:%s]".formatted(input.clientId()));
     }
 
     return new AuthenticationResult(output.accessToken, output.refreshToken);
   }
 
   @Override
-  public AuthenticationResult refresh(RefreshTokenInput input) {
+  public AuthenticationResult refresh(final RefreshTokenInput input) {
     final var map = new LinkedMultiValueMap<>();
     map.set("grant_type", "refresh_token");
     map.set("client_id", input.clientId());
@@ -62,7 +64,8 @@ public class KeycloakAuthenticationGateway implements AuthenticationGateway {
         .body(KeycloakAuthenticationResult.class);
 
     if (output == null) {
-      throw InternalErrorException.with("Failed to refresh client credentials [clientId:%s]".formatted(input.clientId()));
+      throw InternalErrorException.with(
+          "Failed to refresh client credentials [clientId:%s]".formatted(input.clientId()));
     }
 
     return new AuthenticationResult(output.accessToken, output.refreshToken);
@@ -72,5 +75,6 @@ public class KeycloakAuthenticationGateway implements AuthenticationGateway {
       String accessToken,
       String refreshToken
   ) {
+
   }
 }

@@ -1,7 +1,5 @@
 package com.fullcycle.subscription.infrastructure.authentication.clientcredentials;
 
-import com.fullcycle.subscription.infrastructure.authentication.clientcredentials.AuthenticationGateway.ClientCredentialsInput;
-import com.fullcycle.subscription.infrastructure.authentication.clientcredentials.AuthenticationGateway.RefreshTokenInput;
 import com.fullcycle.subscription.infrastructure.configuration.properties.KeycloakProperties;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReferenceFieldUpdater;
@@ -40,13 +38,15 @@ public class ClientCredentialsManager implements GetClientCredentials, RefreshCl
   }
 
   private AuthenticationGateway.AuthenticationResult login() {
-    return this.authenticationGateway.login(new ClientCredentialsInput(clientId(), clientSecret()));
+    return this.authenticationGateway.login(
+        new AuthenticationGateway.ClientCredentialsInput(clientId(), clientSecret()));
   }
 
   private AuthenticationGateway.AuthenticationResult refreshToken() {
     try {
       return this.authenticationGateway.refresh(
-          new RefreshTokenInput(clientId(), clientSecret(), this.credentials.refreshToken()));
+          new AuthenticationGateway.RefreshTokenInput(clientId(), clientSecret(),
+              this.credentials.refreshToken()));
     } catch (RuntimeException ex) {
       return this.login();
     }
