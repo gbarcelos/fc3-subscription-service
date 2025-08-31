@@ -16,9 +16,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * 1. Tornar o ID do IDP (Keycloak) o mesmo ID do usuário interno da aplicação (Account ID) 2.
- * Descobrir o Account ID com base no Subject do JWT 3. Colocar o Account ID dentro dos claims do
- * JWT
+ * 1. Tornar o ID do IDP (Keycloak) o mesmo ID do usuário interno da aplicação (Account ID)
+ * 2. Descobrir o Account ID com base no Subject do JWT
+ * 3. Colocar o Account ID dentro dos claims do JWT
  */
 @RestController
 public class SubscriptionRestController implements SubscriptionRestApi {

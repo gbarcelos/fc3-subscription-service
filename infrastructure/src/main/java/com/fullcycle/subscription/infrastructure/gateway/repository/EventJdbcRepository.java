@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -23,6 +24,13 @@ public class EventJdbcRepository {
     this.database = Objects.requireNonNull(database);
   }
 
+  public Optional<DomainEvent> eventOfIdAndUnprocessed(final Long eventId) {
+    final var sql = "SELECT event_id, processed, aggregate_id, aggregate_type, event_type, event_date, event_data FROM events WHERE event_id = :eventId AND processed = false";
+    final var params = Map.<String, Object>of("eventId", eventId);
+    return this.database.queryOne(sql, params, eventMapper())
+        .map(this::toDomainEvent);
+  }
+
   public List<DomainEvent> allEventsOfAggregate(final String aggregateId,
       final String aggregateType) {
     final var sql = "SELECT event_id, processed, aggregate_id, aggregate_type, event_type, event_date, event_data FROM events WHERE aggregate_id = :aggregateId and aggregate_type = :aggregateType";
@@ -32,6 +40,13 @@ public class EventJdbcRepository {
     return this.database.query(sql, params, eventMapper()).stream()
         .map(this::toDomainEvent)
         .toList();
+  }
+
+  public void markAsProcessed(final Long eventId) {
+    final var sql = "UPDATE events SET processed = true WHERE event_id = :id";
+    if (this.database.update(sql, Map.of("id", eventId)) == 0) {
+      throw new IllegalArgumentException("Event with id %s was not found".formatted(eventId));
+    }
   }
 
   public void saveAll(final Collection<DomainEvent> events) {
